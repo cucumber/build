@@ -76,24 +76,24 @@ RUN addgroup --gid "$GID" "$USER" \
 
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-COPY --chown=$USER ci-toolchain.xml /home/cukebot/.m2/toolchain.xml
-COPY --chown=$USER ci-settings.xml /home/cukebot/.m2/settings.xml
+COPY --chown=$USER toolchains.xml /home/$USER/.m2/toolchains.xml
+COPY --chown=$USER settings.xml /home/$USER/.m2/settings.xml
 
 # Configure Ruby
 RUN echo "gem: --no-document" > ~/.gemrc \
     && gem install bundler io-console \
-    && chown -R cukebot:cukebot /usr/lib/ruby  \
-    && chown -R cukebot:cukebot /usr/local/bin \
-    && chown -R cukebot:cukebot /var/lib \
-    && chown -R cukebot:cukebot /usr/bin
+    && chown -R $USER:$USER /usr/lib/ruby  \
+    && chown -R $USER:$USER /usr/local/bin \
+    && chown -R $USER:$USER /var/lib \
+    && chown -R $USER:$USER /usr/bin
 
 # Install and configure pip2, twine and behave
 RUN curl https://bootstrap.pypa.io/get-pip.py | python2 \
     && pip install pipenv \
     && pip install twine \
     && pip install behave
-#    && chown -R cukebot:cukebot /usr/lib/python2.7/site-packages \
-#    && mkdir -p /usr/man && chown -R cukebot:cukebot /usr/man
+#    && chown -R $USER:$USER /usr/lib/python2.7/site-packages \
+#    && mkdir -p /usr/man && chown -R $USER:$USER /usr/man
 
 # Configure Perl
 RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm \
@@ -159,7 +159,7 @@ RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends yarn
 
-USER cukebot
+USER $USER
 
 ## As a user install node and npm via node version-manager
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash \
