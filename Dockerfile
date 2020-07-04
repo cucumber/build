@@ -40,6 +40,7 @@ RUN apt-get update \
         make \
         maven \
         mono-devel \
+        openjdk-8-jdk \
         openjdk-11-jdk \
         openssl \
         perl \
@@ -75,8 +76,8 @@ RUN addgroup --gid "$GID" "$USER" \
 
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
-COPY ci-toolchain.xml /home/cukebot/.m2/toolchain.xml
-COPY ci-settings.xml /home/cukebot/.m2/settings.xml
+COPY --chown=$USER ci-toolchain.xml /home/cukebot/.m2/toolchain.xml
+COPY --chown=$USER ci-settings.xml /home/cukebot/.m2/settings.xml
 
 # Configure Ruby
 RUN echo "gem: --no-document" > ~/.gemrc \
