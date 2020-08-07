@@ -81,7 +81,7 @@ COPY --chown=$USER settings.xml /home/$USER/.m2/settings.xml
 
 # Configure Ruby
 RUN echo "gem: --no-document" > ~/.gemrc \
-    && gem install bundler io-console \
+    && gem install bundler io-console nokogiri \
     && chown -R $USER:$USER /usr/lib/ruby  \
     && chown -R $USER:$USER /usr/local/bin \
     && chown -R $USER:$USER /var/lib \
