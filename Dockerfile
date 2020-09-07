@@ -154,6 +154,16 @@ RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
     && unzip 1.1.1 -d /var/lib/berp/1.1.1 \
     && rm 1.1.1
 
+# Install Elixir
+RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
+    && dpkg -i erlang.deb \
+    && rm -f erlang.deb \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        esl-erlang \
+        elixir \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install JS
 ## Install yarn withouth node
 RUN apt-get update \
