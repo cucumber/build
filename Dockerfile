@@ -155,6 +155,7 @@ RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
     && rm 1.1.1
 
 # Install Elixir
+ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
     && dpkg -i erlang.deb \
     && rm -f erlang.deb \
