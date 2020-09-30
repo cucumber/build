@@ -4,7 +4,7 @@ default:
 
 docker-run: default
 	docker run \
-	  --volume "${HOME}/.m2"/repository:/home/cukebot/.m2/repository \
+	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --volume "${HOME}/.gitconfig":/home/cukebot/.gitconfig \
 	  --user 1000 \
 	  --rm \
@@ -22,7 +22,7 @@ docker-run-with-secrets: default
 	  --volume "${shell pwd}/../secrets/.ssh":/home/cukebot/.ssh \
 	  --volume "${shell pwd}/../secrets/.gem":/home/cukebot/.gem \
 	  --volume "${shell pwd}/../secrets/.npmrc":/home/cukebot/.npmrc \
-	  --volume "${HOME}/.m2"/repository:/home/cukebot/.m2/repository \
+	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --volume "${HOME}/.gitconfig":/home/cukebot/.gitconfig \
 	  --env-file ../secrets/secrets.list \
 	  --user 1000 \
