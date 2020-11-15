@@ -174,6 +174,8 @@ RUN apt-get update \
 RUN curl -SL --output sbt.deb https://dl.bintray.com/sbt/debian/sbt-1.3.13.deb \
     && dpkg -i sbt.deb \
     && rm -f sbt.deb 
+# Configure sbt
+COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
 
 USER $USER
 
