@@ -170,6 +170,13 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends yarn
 
+# Install sbt
+RUN curl -SL --output sbt.deb https://dl.bintray.com/sbt/debian/sbt-1.3.13.deb \
+    && dpkg -i sbt.deb \
+    && rm -f sbt.deb 
+# Configure sbt
+COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
+
 USER $USER
 
 ## As a user install node and npm via node version-manager
