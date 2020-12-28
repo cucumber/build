@@ -35,6 +35,7 @@ RUN apt-get update \
         g++ \
         jq \
         libc-dev \
+        libssl-dev \
         libxml2-dev \
         libxslt-dev \
         make \
@@ -97,7 +98,9 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python2 \
 
 # Configure Perl
 RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm \
-    && chmod +x /usr/local/bin/cpanm
+    && chmod +x /usr/local/bin/cpanm \
+    && cpanm --notest Carton \
+    && rm -rf /root/.cpanm
 
 # Install hub
 RUN git clone \
