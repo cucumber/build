@@ -60,6 +60,49 @@ RUN apt-get update \
         wget \
         xmlstarlet
 
+# dependencies for chrome headless
+RUN apt-get update \
+    && apt-get install --assume-yes  \
+        gconf-service \
+        libasound2 \
+        libatk1.0-0 \
+        libatk-bridge2.0-0 \
+        libc6 \
+        libcairo2 \
+        libcups2 \
+        libdbus-1-3 \
+        libexpat1 \
+        libfontconfig1 \
+        libgcc1 \
+        libgconf-2-4 \
+        libgdk-pixbuf2.0-0 \
+        libglib2.0-0 \
+        libgtk-3-0 \
+        libnspr4 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
+        libstdc++6 \
+        libx11-6 \
+        libx11-xcb1 \
+        libxcb1 \
+        libxcomposite1 \
+        libxcursor1 \
+        libxdamage1 \
+        libxext6 \
+        libxfixes3 \
+        libxi6 \
+        libxrandr2 \
+        libxrender1 \
+        libxss1 \
+        libxtst6 \
+        ca-certificates \
+        fonts-liberation \
+        libappindicator1 \
+        libnss3 \
+        lsb-release \
+        xdg-utils \
+        wget
+
 # Create a cukebot user. Some tools (Bundler, npm publish) don't work properly
 # when run as root
 ENV USER=cukebot
@@ -89,7 +132,7 @@ RUN echo "gem: --no-document" > ~/.gemrc \
     && chown -R $USER:$USER /usr/bin
 
 # Install and configure pip2, twine and behave
-RUN curl https://bootstrap.pypa.io/get-pip.py | python2 \
+RUN curl https://bootstrap.pypa.io/2.7/get-pip.py | python2 \
     && pip install pipenv \
     && pip install twine \
     && pip install behave
