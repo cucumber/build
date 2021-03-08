@@ -89,7 +89,7 @@ RUN echo "gem: --no-document" > ~/.gemrc \
     && chown -R $USER:$USER /usr/bin
 
 # Install and configure pip2, twine and behave
-RUN curl https://bootstrap.pypa.io/2.7/get-pip.py | python2 \
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 \
     && pip install pipenv \
     && pip install twine \
     && pip install behave
