@@ -32,6 +32,7 @@ docker-run-with-secrets: default
 .PHONY: run-with-secrets
 
 docker-push: default
+	docker build --tag cucumber/cucumber-build:latest .
 	[ -d '../secrets' ]  || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
