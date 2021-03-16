@@ -76,7 +76,7 @@ RUN addgroup --gid "$GID" "$USER" \
         "$USER"
 
 # Configure Maven and Java
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-$TARGETARCH
 COPY --chown=$USER toolchains.xml /home/$USER/.m2/toolchains.xml
 COPY --chown=$USER settings.xml /home/$USER/.m2/settings.xml
 
@@ -138,15 +138,22 @@ RUN apt-get update \
         zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
+ARG TARGETARCH
+
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 2.2.207
-RUN curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
-    && dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958' \
+RUN if [ "$TARGETARCH" == "amd64" ]; then export ARCH=x64; else export ARCH=arm64; fi \
+    && curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-$ARCH.tar.gz \
+    && if [ "$TARGETARCH" == "amd64" ]; then dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958'; else dotnet_sha512='565fe5cbc2c388e54b3ee548d5b98e1fd85d920ceeeb5475a2bf2daa7f090fc925d8afef19b2b76973af439fbb749c6996711790287eafd588e4d916a016e84c'; fi  \
     && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
     && mkdir -p /usr/share/dotnet \
     && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
     && rm dotnet.tar.gz \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+
+RUN curl -SL --output /usr/share/dotnet/sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma \
+    &&  lzma_sha512='09c0d7da8da38ed486f53c052f7dd87bfb3f3b9e32300b69b424566395b32422cecbb27db37560d604a89f6463879b40ef6fa5d1ea8fe48cf832aa6f4fa0f331' \
+    && echo "$lzma_sha512 /usr/share/dotnet/sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma" | sha512sum -c -
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet help
@@ -169,21 +176,21 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     && rm -rf /var/lib/apt/lists/*
 
 # Install JS
-## Install yarn withouth node
+## Install yarn without node
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends yarn
 
 # Install sbt
 RUN curl -SL --output sbt.deb https://dl.bintray.com/sbt/debian/sbt-1.3.13.deb \
     && dpkg -i sbt.deb \
-    && rm -f sbt.deb 
+    && rm -f sbt.deb
 # Configure sbt
 COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
 
 # dependencies for chrome headless, wich is required for puppeteer
 # the following has been inspired by https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
-
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+RUN [ "$TARGETARCH" != "amd64" ] \
+    || (wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -194,7 +201,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
         fonts-kacst \
         fonts-freefont-ttf \
         libxss1 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*)
 
 USER $USER
 
