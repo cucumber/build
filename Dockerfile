@@ -169,7 +169,7 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     && rm -rf /var/lib/apt/lists/*
 
 # Install JS
-## Install yarn withouth node
+## Install yarn without node
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends yarn
 
@@ -195,6 +195,12 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
         fonts-freefont-ttf \
         libxss1 \
     && rm -rf /var/lib/apt/lists/*
+
+# Install sqlite3 - Required for cucumber-rails
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        sqlite3
 
 USER $USER
 
