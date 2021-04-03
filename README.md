@@ -29,5 +29,5 @@ Push the image to [Docker Hub](https://hub.docker.com/r/cucumber/cucumber-build/
 Make a git tag:
 
     git commit -am "Release X.Y.Z"
-    git tag `X.Y.Z`
+    git tag X.Y.Z
     git push && git push --tags
