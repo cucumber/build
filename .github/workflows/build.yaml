@@ -1,0 +1,19 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull-request:
+  schedule:
+    - cron: '0 0 * * *'  # midnight daily
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    name: Build docker image
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build the image
+        run: make build
