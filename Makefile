@@ -1,5 +1,5 @@
 default:
-	docker buildx build --rm --tag cucumber/cucumber-build .
+	docker build --rm --tag cucumber/cucumber-build .
 .PHONY: default
 
 docker-push: default
