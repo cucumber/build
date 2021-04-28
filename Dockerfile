@@ -75,6 +75,8 @@ RUN addgroup --gid "$GID" "$USER" \
         --shell /bin/bash \
         "$USER"
 
+ARG TARGETARCH
+
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-$TARGETARCH
 COPY --chown=$USER toolchains.xml /home/$USER/.m2/toolchains.xml
@@ -137,8 +139,6 @@ RUN apt-get update \
         libstdc++6 \
         zlib1g \
     && rm -rf /var/lib/apt/lists/*
-
-ARG TARGETARCH
 
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 2.2.207
