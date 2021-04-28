@@ -142,9 +142,9 @@ RUN apt-get update \
 
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 2.2.207
-RUN if [ "$TARGETARCH" == "amd64" ]; then export ARCH=x64; else export ARCH=arm64; fi \
+RUN if [ "$TARGETARCH" = "amd64" ]; then export ARCH=x64; else export ARCH=arm64; fi \
     && curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-$ARCH.tar.gz \
-    && if [ "$TARGETARCH" == "amd64" ]; then dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958'; else dotnet_sha512='565fe5cbc2c388e54b3ee548d5b98e1fd85d920ceeeb5475a2bf2daa7f090fc925d8afef19b2b76973af439fbb749c6996711790287eafd588e4d916a016e84c'; fi  \
+    && if [ "$TARGETARCH" = "amd64" ]; then dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958'; else dotnet_sha512='565fe5cbc2c388e54b3ee548d5b98e1fd85d920ceeeb5475a2bf2daa7f090fc925d8afef19b2b76973af439fbb749c6996711790287eafd588e4d916a016e84c'; fi  \
     && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
     && mkdir -p /usr/share/dotnet \
     && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
