@@ -129,7 +129,7 @@ RUN go get -d github.com/libgit2/git2go \
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 ## Install .NET CLI dependencies
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install --assume-yes --no-install-recommends \
         libc6 \
         libgcc1 \
         libgssapi-krb5-2 \
@@ -170,7 +170,7 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     && dpkg -i erlang.deb \
     && rm -f erlang.deb \
     && apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install --assume-yes --no-install-recommends \
         esl-erlang \
         elixir \
     && rm -rf /var/lib/apt/lists/*
@@ -181,7 +181,7 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends yarn
 
 # Install sbt
-RUN curl -SL --output sbt.deb https://dl.bintray.com/sbt/debian/sbt-1.3.13.deb \
+RUN curl -SL --output sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb \
     && dpkg -i sbt.deb \
     && rm -f sbt.deb
 # Configure sbt
@@ -202,6 +202,13 @@ RUN [ "$TARGETARCH" != "amd64" ] \
         fonts-freefont-ttf \
         libxss1 \
     && rm -rf /var/lib/apt/lists/*)
+
+# Install sqlite3 - Required for cucumber-rails
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends \
+        ca-certificates \
+        sqlite3 \
+        libsqlite3-dev
 
 USER $USER
 

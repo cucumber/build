@@ -5,19 +5,29 @@ Docker image used to build and release projects in the Cucumber organization.
 
 # Usage
 
-In a cucumber project use the `cucumber/cucumber-build:latest` image to build
-and or release.
+In a cucumber project use the `cucumber/cucumber-build:TAG` image to build
+and/or release. You'll find available tags at [Docker Hub](https://hub.docker.com/r/cucumber/cucumber-build/tags).
 
-The secrets needed to make a release can be found in keybase
+The secrets needed to make a release can be found in Keybase
 and should be mounted into the docker image. For an example see
 `docker-run-with-secrets` in the `Makefile`.
 
 # Building the image
 
-    docker build --tag cucumber/cucumber-build:latest .
+    make
 
 # Pushing a new image
 
+Before pushing a new image, update `TAG` in `Makefile`. Then build it again:
+
+    make
+
+Push the image to [Docker Hub](https://hub.docker.com/r/cucumber/cucumber-build/tags):
+
     make docker-push
 
-This will build the image and publish it at https://hub.docker.com/r/cucumber/.
+Make a git tag:
+
+    git commit -am "Release X.Y.Z"
+    git tag X.Y.Z
+    git push && git push --tags

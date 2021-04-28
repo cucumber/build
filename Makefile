@@ -2,13 +2,21 @@ default:
 	docker buildx build --rm --tag cucumber/cucumber-build .
 .PHONY: default
 
+docker-push: default
+	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
+	git -C ../secrets pull
+	. ../secrets/docker-hub-secrets.sh \
+		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
+		&& docker push ${IMG} \
+		&& docker push ${LATEST} \
+.PHONY: docker-push
+
 docker-run: default
 	docker run \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
-	  --volume "${HOME}/.gitconfig":/home/cukebot/.gitconfig \
 	  --user 1000 \
 	  --rm \
-	  -it cucumber/cucumber-build:latest \
+	  -it ${IMG} \
 	  bash
 .PHONY:
 
@@ -23,7 +31,6 @@ docker-run-with-secrets: default
 	  --volume "${shell pwd}/../secrets/.gem":/home/cukebot/.gem \
 	  --volume "${shell pwd}/../secrets/.npmrc":/home/cukebot/.npmrc \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
-	  --volume "${HOME}/.gitconfig":/home/cukebot/.gitconfig \
 	  --env-file ../secrets/secrets.list \
 	  --user 1000 \
 	  --rm \
