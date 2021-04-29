@@ -31,15 +31,17 @@ docker-run-with-secrets: default
 	  --env-file ../secrets/secrets.list \
 	  --user 1000 \
 	  --rm \
-	  -it cucumber/cucumber-build:latest \
+	  -it ${NAME}:latest \
 	  bash
 .PHONY: run-with-secrets
 
 docker-push: default
-	docker buildx build --platform=linux/amd64,linux/arm64 --tag cucumber/cucumber-build .
-	[ -d '../secrets' ]  || git clone keybase://team/cucumberbdd/secrets ../secrets
+	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
-	. ../secrets/docker-hub-secrets.sh \
-		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --all-tags
+	. ../secrets/docker-hub-secrets.sh docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD}
+	docker buildx build --platform=linux/amd64,linux/arm64 .
+		--tag ${NAME}:latest \
+		--tag ${NAME}:${VERSION} \
+		--push
+		.
 .PHONY: docker-push

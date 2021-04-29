@@ -21,6 +21,10 @@ Before pushing a new image, update `VERSION` in `Makefile`. Then build it again:
 
     make
 
+Now start a multi-platform builder:
+
+    docker buildx create --use
+
 Push the image to [Docker Hub](https://hub.docker.com/r/cucumber/cucumber-build/tags):
 
     make docker-push
