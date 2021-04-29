@@ -197,14 +197,14 @@ RUN apt-get update \
     libsqlite3-dev
 
 # nix needs this folder
-RUN [ "$TARGETARCH" != "amd64" ] \
-    &&  mkdir /nix && chown -R cukebot /nix
+RUN [ "$TARGETARCH" == "amd64" ] \
+    || mkdir /nix && chown -R $USER /nix
 
 USER $USER
 
 # nix should be run as non root user
-RUN [ "$TARGETARCH" != "amd64" ] \
-    && (curl -L https://nixos.org/nix/install | sh) \
+RUN [ "$TARGETARCH" == "amd64" ] \
+    || (curl -L https://nixos.org/nix/install | sh) \
     && . /home/$USER/.nix-profile/etc/profile.d/nix.sh && nix-env --install chromium \
     && cp ~/.nix-profile/bin/chromium-browser /usr/bin/
 
