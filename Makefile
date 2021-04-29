@@ -39,9 +39,9 @@ docker-push: default
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD}
-	docker buildx build --platform=linux/amd64,linux/arm64 .
+	docker buildx build --platform=linux/amd64,linux/arm64 \
 		--tag ${NAME}:latest \
 		--tag ${NAME}:${VERSION} \
-		--push
+		--push \
 		.
 .PHONY: docker-push
