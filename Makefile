@@ -8,14 +8,6 @@ default:
 		.
 .PHONY: default
 
-docker-push: default
-	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
-	git -C ../secrets pull
-	. ../secrets/docker-hub-secrets.sh \
-		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --all-tags \
-.PHONY: docker-push
-
 docker-run: default
 	docker run \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
@@ -49,5 +41,5 @@ docker-push: default
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push cucumber/cucumber-build:latest
+		&& docker push --all-tags
 .PHONY: docker-push
