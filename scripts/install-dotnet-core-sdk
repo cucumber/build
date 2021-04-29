@@ -1,9 +1,15 @@
 #!/usr/bin/env sh
 
-export TARGETARCH=$1
-export DOTNET_SDK_VERSION=$2
+export DOTNET_SDK_VERSION=$1
+export TARGETARCH=$2
 
-echo "\n# Installing .NET Core SDK v$DOTNET_SDK_VERSION for $TARGETARCH\n"
+if [ -z $TARGETARCH ]
+then
+    echo "Please specify TARGETARCH as the second argument"
+    exit 1
+fi
+
+echo "\n# Installing .NET Core SDK v$DOTNET_SDK_VERSION for arch $TARGETARCH\n"
 
 if [ "$TARGETARCH" = "amd64" ]
 then 
