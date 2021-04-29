@@ -173,22 +173,6 @@ RUN curl -SL --output sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5
 # Configure sbt
 COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
 
-# dependencies for chrome headless, wich is required for puppeteer
-# the following has been inspired by https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
-RUN [ "$TARGETARCH" != "amd64" ] \
-    || (wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install --assume-yes --no-install-recommends \
-    google-chrome-stable \
-    fonts-ipafont-gothic \
-    fonts-wqy-zenhei \
-    fonts-thai-tlwg \
-    fonts-kacst \
-    fonts-freefont-ttf \
-    libxss1 \
-    && rm -rf /var/lib/apt/lists/*)
-
 # Install sqlite3 - Required for cucumber-rails
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -197,14 +181,12 @@ RUN apt-get update \
     libsqlite3-dev
 
 # nix needs this folder
-RUN [ "$TARGETARCH" = "amd64" ] \
-    || mkdir /nix && chown -R $USER /nix
+RUN mkdir /nix && chown -R $USER /nix
 
 USER $USER
 
-# nix should be run as non root user
-RUN [ "$TARGETARCH" = "amd64" ] \
-    || (curl -L https://nixos.org/nix/install | sh) \
+# install nix and use it to install chromium-browser (required for puppeteer tests of html-formatter)
+RUN (curl -L https://nixos.org/nix/install | sh) \
     && . /home/$USER/.nix-profile/etc/profile.d/nix.sh && nix-env --install chromium \
     && cp ~/.nix-profile/bin/chromium-browser /usr/bin/
 
