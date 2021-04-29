@@ -1,5 +1,4 @@
-Cucumber Build
-==============
+# Cucumber Build
 
 Docker image used to build and release projects in the Cucumber organization.
 
@@ -18,7 +17,7 @@ and should be mounted into the docker image. For an example see
 
 # Pushing a new image
 
-Before pushing a new image, update `TAG` in `Makefile`. Then build it again:
+Before pushing a new image, update `VERSION` in `Makefile`. Then build it again:
 
     make
 
