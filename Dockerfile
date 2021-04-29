@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
     && apt-get install --assume-yes \
-        locales
+    locales
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -19,46 +19,46 @@ WORKDIR /app
 # Include universe repositories for EOLed versions
 RUN apt-get update \
     && apt-get install --assume-yes  \
-        software-properties-common \
+    software-properties-common \
     && add-apt-repository universe
 
 RUN apt-get update \
     && apt-get install --assume-yes  \
-        bash \
-        cmake \
-        curl \
-        diffutils \
-        golang-go \
-        git \
-        gnupg \
-        groff \
-        g++ \
-        jq \
-        libc-dev \
-        libssl-dev \
-        libxml2-dev \
-        libxslt-dev \
-        make \
-        maven \
-        mono-devel \
-        openjdk-8-jdk \
-        openjdk-11-jdk \
-        openssl \
-        perl \
-        protobuf-compiler \
-        python2 \
-        pipenv \
-        rsync \
-        ruby \
-        ruby-dev \
-        ruby-json \
-        rubygems \
-        sed \
-        tree \
-        unzip \
-        upx \
-        wget \
-        xmlstarlet
+    bash \
+    cmake \
+    curl \
+    diffutils \
+    golang-go \
+    git \
+    gnupg \
+    groff \
+    g++ \
+    jq \
+    libc-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    make \
+    maven \
+    mono-devel \
+    openjdk-8-jdk \
+    openjdk-11-jdk \
+    openssl \
+    perl \
+    protobuf-compiler \
+    python2 \
+    pipenv \
+    rsync \
+    ruby \
+    ruby-dev \
+    ruby-json \
+    rubygems \
+    sed \
+    tree \
+    unzip \
+    upx \
+    wget \
+    xmlstarlet
 
 # Create a cukebot user. Some tools (Bundler, npm publish) don't work properly
 # when run as root
@@ -68,12 +68,12 @@ ENV GID=2000
 
 RUN addgroup --gid "$GID" "$USER" \
     && adduser \
-        --disabled-password \
-        --gecos "" \
-        --ingroup "$USER" \
-        --uid "$UID" \
-        --shell /bin/bash \
-        "$USER"
+    --disabled-password \
+    --gecos "" \
+    --ingroup "$USER" \
+    --uid "$UID" \
+    --shell /bin/bash \
+    "$USER"
 
 ARG TARGETARCH
 
@@ -106,11 +106,11 @@ RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm \
 
 # Install hub
 RUN git clone \
-        -b v2.12.2 --single-branch --depth 1 \
-        --config transfer.fsckobjects=false \
-        --config receive.fsckobjects=false \
-        --config fetch.fsckobjects=false \
-        https://github.com/github/hub.git  \
+    -b v2.12.2 --single-branch --depth 1 \
+    --config transfer.fsckobjects=false \
+    --config receive.fsckobjects=false \
+    --config fetch.fsckobjects=false \
+    https://github.com/github/hub.git  \
     && cd hub  \
     && make  \
     && cp bin/hub /usr/local/bin/hub \
@@ -132,31 +132,17 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 ## Install .NET CLI dependencies
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        libc6 \
-        libgcc1 \
-        libgssapi-krb5-2 \
-        liblttng-ust0 \
-        libstdc++6 \
-        zlib1g \
+    libc6 \
+    libgcc1 \
+    libgssapi-krb5-2 \
+    liblttng-ust0 \
+    libstdc++6 \
+    zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 2.2.207
-RUN if [ "$TARGETARCH" = "amd64" ]; then export ARCH=x64; else export ARCH=arm64; fi \
-    && curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-$ARCH.tar.gz \
-    && if [ "$TARGETARCH" = "amd64" ]; then dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958'; else dotnet_sha512='565fe5cbc2c388e54b3ee548d5b98e1fd85d920ceeeb5475a2bf2daa7f090fc925d8afef19b2b76973af439fbb749c6996711790287eafd588e4d916a016e84c'; fi  \
-    && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
-    && mkdir -p /usr/share/dotnet \
-    && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
-    && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
-
-RUN curl -SL --output /usr/share/dotnet/sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma \
-    &&  lzma_sha512='09c0d7da8da38ed486f53c052f7dd87bfb3f3b9e32300b69b424566395b32422cecbb27db37560d604a89f6463879b40ef6fa5d1ea8fe48cf832aa6f4fa0f331' \
-    && echo "$lzma_sha512 /usr/share/dotnet/sdk/$DOTNET_SDK_VERSION/nuGetPackagesArchive.lzma" | sha512sum -c -
-
-## Trigger first run experience by running arbitrary cmd to populate local package cache
-RUN dotnet help
+COPY ./scripts/install-dotnet-core-sdk .
+RUN ./install-dotnet-core-sdk $TARGETARCH 2.2.207
 
 # Install Berp
 RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
@@ -171,8 +157,8 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     && rm -f erlang.deb \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        esl-erlang \
-        elixir \
+    esl-erlang \
+    elixir \
     && rm -rf /var/lib/apt/lists/*
 
 # Install JS
@@ -194,25 +180,25 @@ RUN [ "$TARGETARCH" != "amd64" ] \
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        google-chrome-stable \
-        fonts-ipafont-gothic \
-        fonts-wqy-zenhei \
-        fonts-thai-tlwg \
-        fonts-kacst \
-        fonts-freefont-ttf \
-        libxss1 \
+    google-chrome-stable \
+    fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
+    fonts-thai-tlwg \
+    fonts-kacst \
+    fonts-freefont-ttf \
+    libxss1 \
     && rm -rf /var/lib/apt/lists/*)
 
 # Install sqlite3 - Required for cucumber-rails
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        ca-certificates \
-        sqlite3 \
-        libsqlite3-dev
+    ca-certificates \
+    sqlite3 \
+    libsqlite3-dev
 
 # nix needs this folder
 RUN [ "$TARGETARCH" != "amd64" ] \
-	&&  mkdir /nix && chown -R cukebot /nix
+    &&  mkdir /nix && chown -R cukebot /nix
 
 USER $USER
 
