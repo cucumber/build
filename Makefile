@@ -1,5 +1,11 @@
+NAME    := cucumber/cucumber-build
+VERSION := 0.2.0
+
 default:
-	docker build --rm --tag cucumber/cucumber-build .
+	docker build --rm \
+		--tag ${NAME}:latest \
+		--tag ${NAME}:${VERSION} \
+		.
 .PHONY: default
 
 docker-push: default
@@ -7,8 +13,7 @@ docker-push: default
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push ${IMG} \
-		&& docker push ${LATEST} \
+		&& docker push --all-tags \
 .PHONY: docker-push
 
 docker-run: default
@@ -16,7 +21,7 @@ docker-run: default
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --user 1000 \
 	  --rm \
-	  -it ${IMG} \
+	  -it ${NAME} \
 	  bash
 .PHONY:
 
