@@ -142,7 +142,7 @@ RUN apt-get update \
 
 ## Install .NET Core SDK
 COPY ./scripts/install-dotnet-core-sdk .
-RUN ./install-dotnet-core-sdk $TARGETARCH 2.2.207
+RUN ./install-dotnet-core-sdk $TARGETARCH "2.2.207"
 
 # Install Berp
 RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
