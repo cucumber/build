@@ -8,6 +8,10 @@ default:
 		.
 .PHONY: default
 
+all-platforms:
+	docker buildx build --platform=linux/amd64,linux/arm64 .
+.PHONY: all-platforms	
+
 docker-run: default
 	docker run \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
