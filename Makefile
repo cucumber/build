@@ -1,6 +1,7 @@
 NAME      := cucumber/cucumber-build
 VERSION   := 0.2.0
-PLATFORMS ?= linux/amd64
+DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
+PLATFORMS ?= ${DEFAULT_PLATFORM}
 
 default:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
