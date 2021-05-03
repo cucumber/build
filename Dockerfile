@@ -139,17 +139,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 2.2.207
-RUN curl -SL --output dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
-    && dotnet_sha512='9d70b4a8a63b66da90544087199a0f681d135bf90d43ca53b12ea97cc600a768b0a3d2f824cfe27bd3228e058b060c63319cd86033be8b8d27925283f99de958' \
-    && echo "$dotnet_sha512 dotnet.tar.gz" | sha512sum -c - \
-    && mkdir -p /usr/share/dotnet \
-    && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
-    && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+ENV DOTNET_SDK_VERSION 5.0
+
+RUN curl -SL -o- https://dot.net/v1/dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION \
+    && ln -s /root/.dotnet/dotnet /usr/bin/dotnet
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
-RUN dotnet help
+RUN dotnet --list-sdks
 
 # Install Berp
 RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
