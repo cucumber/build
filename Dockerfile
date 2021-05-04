@@ -141,8 +141,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
-COPY ./scripts/install-dotnet-core-sdk .
-RUN ./install-dotnet-core-sdk "2.2.207" $TARGETARCH
+ENV DOTNET_SDK_VERSION 5.0
+
+RUN curl -SL -o- https://dot.net/v1/dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION \
+    && ln -s /root/.dotnet/dotnet /usr/bin/dotnet
+
+## Trigger first run experience by running arbitrary cmd to populate local package cache
+RUN dotnet --list-sdks
 
 # Install Berp
 RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
