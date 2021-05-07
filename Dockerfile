@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
     && apt-get install --assume-yes \
-        locales
+    locales
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -19,46 +19,46 @@ WORKDIR /app
 # Include universe repositories for EOLed versions
 RUN apt-get update \
     && apt-get install --assume-yes  \
-        software-properties-common \
+    software-properties-common \
     && add-apt-repository universe
 
 RUN apt-get update \
     && apt-get install --assume-yes  \
-        bash \
-        cmake \
-        curl \
-        diffutils \
-        golang-go \
-        git \
-        gnupg \
-        groff \
-        g++ \
-        jq \
-        libc-dev \
-        libssl-dev \
-        libxml2-dev \
-        libxslt-dev \
-        make \
-        maven \
-        mono-devel \
-        openjdk-8-jdk \
-        openjdk-11-jdk \
-        openssl \
-        perl \
-        protobuf-compiler \
-        python2 \
-        pipenv \
-        rsync \
-        ruby \
-        ruby-dev \
-        ruby-json \
-        rubygems \
-        sed \
-        tree \
-        unzip \
-        upx \
-        wget \
-        xmlstarlet
+    bash \
+    cmake \
+    curl \
+    diffutils \
+    golang-go \
+    git \
+    gnupg \
+    groff \
+    g++ \
+    jq \
+    libc-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt-dev \
+    make \
+    maven \
+    mono-devel \
+    openjdk-8-jdk \
+    openjdk-11-jdk \
+    openssl \
+    perl \
+    protobuf-compiler \
+    python2 \
+    pipenv \
+    rsync \
+    ruby \
+    ruby-dev \
+    ruby-json \
+    rubygems \
+    sed \
+    tree \
+    unzip \
+    upx \
+    wget \
+    xmlstarlet
 
 # Create a cukebot user. Some tools (Bundler, npm publish) don't work properly
 # when run as root
@@ -68,12 +68,12 @@ ENV GID=2000
 
 RUN addgroup --gid "$GID" "$USER" \
     && adduser \
-        --disabled-password \
-        --gecos "" \
-        --ingroup "$USER" \
-        --uid "$UID" \
-        --shell /bin/bash \
-        "$USER"
+    --disabled-password \
+    --gecos "" \
+    --ingroup "$USER" \
+    --uid "$UID" \
+    --shell /bin/bash \
+    "$USER"
 
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
@@ -104,11 +104,11 @@ RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm \
 
 # Install hub
 RUN git clone \
-        -b v2.12.2 --single-branch --depth 1 \
-        --config transfer.fsckobjects=false \
-        --config receive.fsckobjects=false \
-        --config fetch.fsckobjects=false \
-        https://github.com/github/hub.git  \
+    -b v2.12.2 --single-branch --depth 1 \
+    --config transfer.fsckobjects=false \
+    --config receive.fsckobjects=false \
+    --config fetch.fsckobjects=false \
+    https://github.com/github/hub.git  \
     && cd hub  \
     && make  \
     && cp bin/hub /usr/local/bin/hub \
@@ -130,12 +130,12 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=true
 ## Install .NET CLI dependencies
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        libc6 \
-        libgcc1 \
-        libgssapi-krb5-2 \
-        liblttng-ust0 \
-        libstdc++6 \
-        zlib1g \
+    libc6 \
+    libgcc1 \
+    libgssapi-krb5-2 \
+    liblttng-ust0 \
+    libstdc++6 \
+    zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
@@ -160,8 +160,8 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     && rm -f erlang.deb \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        esl-erlang \
-        elixir \
+    esl-erlang \
+    elixir \
     && rm -rf /var/lib/apt/lists/*
 
 # Install JS
@@ -183,21 +183,21 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        google-chrome-stable \
-        fonts-ipafont-gothic \
-        fonts-wqy-zenhei \
-        fonts-thai-tlwg \
-        fonts-kacst \
-        fonts-freefont-ttf \
-        libxss1 \
+    google-chrome-stable \
+    fonts-ipafont-gothic \
+    fonts-wqy-zenhei \
+    fonts-thai-tlwg \
+    fonts-kacst \
+    fonts-freefont-ttf \
+    libxss1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install sqlite3 - Required for cucumber-rails
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
-        ca-certificates \
-        sqlite3 \
-        libsqlite3-dev
+    ca-certificates \
+    sqlite3 \
+    libsqlite3-dev
 
 USER $USER
 
