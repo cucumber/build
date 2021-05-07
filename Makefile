@@ -4,17 +4,17 @@ IMG     := ${NAME}:${TAG}
 LATEST  := ${NAME}:latest
 
 build:
-	@docker build --rm --tag ${IMG} .
-	@docker tag ${IMG} ${LATEST}
+	docker buildx build --rm --tag ${IMG} .
 .PHONY: default
 
 docker-push: default
+	docker buildx build --tag ${IMG} --tag ${LATEST}
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
 		&& docker push ${IMG} \
-		&& docker push ${LATEST} \
+		&& docker push --all-tags ${NAME} \
 .PHONY: docker-push
 
 docker-run: default
