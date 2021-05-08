@@ -1,20 +1,19 @@
-NAME    := cucumber/cucumber-build
-TAG     := 0.1.0
-IMG     := ${NAME}:${TAG}
-LATEST  := ${NAME}:latest
+NAME      := cucumber/cucumber-build
+VERSION   := 0.3.0
+DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
+PLATFORMS ?= ${DEFAULT_PLATFORM}
 
 default:
-	docker buildx build --rm --tag ${IMG} .
+	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
 .PHONY: default
 
 docker-push: default
-	docker buildx build --tag ${IMG} --tag ${LATEST}
+	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push ${IMG} \
-		&& docker push --all-tags ${NAME} \
+		&& docker push --all-tags ${NAME}
 .PHONY: docker-push
 
 docker-run: default
@@ -22,7 +21,7 @@ docker-run: default
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --user 1000 \
 	  --rm \
-	  -it ${IMG} \
+	  -it ${NAME} \
 	  bash
 .PHONY:
 
@@ -40,6 +39,6 @@ docker-run-with-secrets: default
 	  --env-file ../secrets/secrets.list \
 	  --user 1000 \
 	  --rm \
-	  -it cucumber/cucumber-build:latest \
+	  -it ${NAME} \
 	  bash
-.PHONY: docker-run-with-secrets
+.PHONY: run-with-secrets
