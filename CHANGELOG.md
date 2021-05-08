@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-* Change Dockerfile to install .NET 5 SDK - [#19](https://github.com/cucumber/cucumber-build/pull/19)
+- Change Dockerfile to install .NET 5 SDK - [#19](https://github.com/cucumber/cucumber-build/pull/19)
+
+## [0.2.0]
+
+Experimental arm64 build
 
 ## [0.1.0]
 
