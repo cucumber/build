@@ -3,7 +3,7 @@ TAG     := 0.1.0
 IMG     := ${NAME}:${TAG}
 LATEST  := ${NAME}:latest
 
-build:
+default:
 	docker buildx build --rm --tag ${IMG} .
 .PHONY: default
 
