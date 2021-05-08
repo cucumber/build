@@ -143,8 +143,8 @@ RUN apt-get update \
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 5.0
 
-RUN curl -SL -o- https://dot.net/v1/dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION \
-    && ln -s /root/.dotnet/dotnet /usr/bin/dotnet
+RUN curl -SL -o- https://dot.net/v1/dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet --list-sdks
