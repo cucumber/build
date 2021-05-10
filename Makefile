@@ -13,7 +13,7 @@ docker-push: default
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --all-tags ${NAME}
+		&& docker push --tag ${NAME}:latest --tag ${NAME}:${VERSION}
 .PHONY: docker-push
 
 docker-run: default
