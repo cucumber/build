@@ -1,11 +1,20 @@
 NAME      := cucumber/cucumber-build
-VERSION   := 0.2.0
+VERSION   := 0.3.0
 DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
 PLATFORMS ?= ${DEFAULT_PLATFORM}
 
 default:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
 .PHONY: default
+
+docker-push: default
+	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
+	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
+	git -C ../secrets pull
+	. ../secrets/docker-hub-secrets.sh \
+		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
+		&& docker push --tag ${NAME}:latest --tag ${NAME}:${VERSION}
+.PHONY: docker-push
 
 docker-run: default
 	docker run \
@@ -33,12 +42,7 @@ docker-run-with-secrets: default
 	  -it ${NAME} \
 	  bash
 .PHONY: run-with-secrets
+<<<<<<< HEAD
 
-docker-push: default
-	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
-	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
-	git -C ../secrets pull
-	. ../secrets/docker-hub-secrets.sh \
-		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --all-tags ${NAME}
-.PHONY: docker-push
+=======
+>>>>>>> main
