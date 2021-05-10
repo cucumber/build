@@ -184,15 +184,19 @@ RUN apt-get update \
     sqlite3 \
     libsqlite3-dev
 
-# nix needs this folder
-RUN mkdir /nix && chown -R $USER /nix
+# Download and install chromium for puppetteer
+ENV CHROMIUM_DOWNLOAD_HOST=https://storage.googleapis.com
+# Get this from `curl https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media`
+ENV CHROMIUM_REVISION=881257
+# TODO: support ARM architecture
+ENV CHROMIUM_ARCH=Linux_x64
+
+RUN wget --no-check-certificate -q -O chrome.zip $CHROMIUM_DOWNLOAD_HOST/chromium-browser-snapshots/$CHROMIUM_ARCH/$CHROMIUM_REVISION/chrome-linux.zip \
+    && unzip chrome.zip \
+    && rm chrome.zip \
+    && ln -s $PWD/chrome-linux/chrome /usr/bin/chromium-browser
 
 USER $USER
-
-# install nix and use it to install chromium-browser (required for puppeteer tests of html-formatter)
-RUN (curl -L https://nixos.org/nix/install | sh) \
-    && . /home/$USER/.nix-profile/etc/profile.d/nix.sh && nix-env --install chromium \
-    && cp ~/.nix-profile/bin/chromium-browser /usr/bin/
 
 ## As a user install node and npm via node version-manager
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash \
