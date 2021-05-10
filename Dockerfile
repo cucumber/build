@@ -40,7 +40,6 @@ RUN apt-get update \
     libxslt-dev \
     make \
     maven \
-    mono-devel \
     openjdk-8-jdk \
     openjdk-11-jdk \
     openssl \
