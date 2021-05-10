@@ -42,7 +42,3 @@ docker-run-with-secrets: default
 	  -it ${NAME} \
 	  bash
 .PHONY: run-with-secrets
-<<<<<<< HEAD
-
-=======
->>>>>>> main
