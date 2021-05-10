@@ -7,6 +7,10 @@ default:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
 .PHONY: default
 
+local: default
+	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --load .
+.PHONY: local
+
 docker-push: default
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
@@ -16,7 +20,7 @@ docker-push: default
 		&& docker push --tag ${NAME}:latest --tag ${NAME}:${VERSION}
 .PHONY: docker-push
 
-docker-run: default
+docker-run: local
 	docker run \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --user 1000 \
