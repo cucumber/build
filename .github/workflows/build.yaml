@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # - uses: satackey/action-docker-layer-caching@v0.0.11
+      - run: docker buildx create --use
       - name: Build the image
         run: PLATFORMS=limux/arm64,linux/amd64 make
         env:
