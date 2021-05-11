@@ -1,18 +1,27 @@
 set -e
 
-TARGETARCH=$1
-if [ -z $TARGETARCH ]
-then
-    echo "Need target arch"
-    exit 1
-fi
-CHROMIUM_ARCH=$([ $TARGETARCH = 'arm64' ] && echo 'Linux_ARM_Cross-Compile' || echo 'Linux_x64')
+apt remove --assume-yes chromium-browser chromium-browser-l10n chromium-codecs-ffmpeg-extra
+echo " deb http://deb.debian.org/debian buster main
+ deb http://deb.debian.org/debian buster-updates main
+ deb http://deb.debian.org/debian-security buster/updates main" > /etc/apt/sources.list.d/debian.list
 
-CHROMIUM_DOWNLOAD_HOST=https://storage.googleapis.com
-   
-# Get this from `curl https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media`
-CHROMIUM_REVISION=$(curl https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/$CHROMIUM_ARCH%2FLAST_CHANGE?alt=media)
-# TODO: support ARM architecture
-CHROMIUM_DOWNLOAD_URL=$CHROMIUM_DOWNLOAD_HOST/chromium-browser-snapshots/$CHROMIUM_ARCH/$CHROMIUM_REVISION/chrome-linux.zip
-echo $CHROMIUM_DOWNLOAD_URL
-wget --no-check-certificate -q -O chrome.zip $CHROMIUM_DOWNLOAD_URL
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E11517
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AA8E81B4331F7F50
+ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 112695A0E562B32A
+
+echo ' # Note: 2 blank lines are required between entries
+ Package: *
+ Pin: release a=eoan
+ Pin-Priority: 500
+
+ Package: *
+ Pin: origin "ftp.debian.org"
+ Pin-Priority: 300
+
+ # Pattern includes 'chromium', 'chromium-browser' and similarly
+ # named dependencies:
+ Package: chromium*
+ Pin: origin "ftp.debian.org"
+ Pin-Priority: 700' > /etc/apt/preferences.d/chromium.pref
+apt update && apt install --assume-yes chromium

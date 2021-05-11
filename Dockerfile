@@ -186,12 +186,7 @@ RUN apt-get update \
 
 # Download and install chromium for puppetteer
 COPY scripts/download-chrome.sh .
-RUN bash ./download-chrome.sh ${TARGETARCH} \
-    && unzip chrome.zip \
-    && rm chrome.zip \
-    && mv ./chrome-linux /home/$USER \
-    && chown -R $USER /home/$USER/chrome-linux \
-    && ln -s /home/$USER/chrome-linux/chrome /usr/bin/chromium-browser
+RUN bash ./download-chrome.sh
 
 USER $USER
 
