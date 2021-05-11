@@ -1,5 +1,5 @@
 NAME      := cucumber/cucumber-build
-VERSION   := 0.3.0
+VERSION   := pr-12
 DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
 PLATFORMS ?= ${DEFAULT_PLATFORM}
 
@@ -17,7 +17,8 @@ docker-push: default
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --tag ${NAME}:latest --tag ${NAME}:${VERSION}
+		&& docker push ${NAME}:latest 
+		&& docker push ${NAME}:${VERSION}
 .PHONY: docker-push
 
 docker-run: local
