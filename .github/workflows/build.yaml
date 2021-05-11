@@ -17,6 +17,7 @@ jobs:
       # - uses: satackey/action-docker-layer-caching@v0.0.11
       - run: docker buildx create --use
       - name: Build the image
-        run: PLATFORMS=limux/arm64,linux/amd64 make
+        run: make
         env:
+          PLATFORMS: linux/arm64,linux/amd64
           DOCKER_BUILDKIT: 1
