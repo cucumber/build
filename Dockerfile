@@ -188,6 +188,9 @@ RUN apt-get update \
 COPY scripts/download-chrome.sh .
 RUN bash ./download-chrome.sh
 
+COPY scripts/install-mono.sh .
+RUN bash ./install-mono.sh
+
 USER $USER
 
 ## As a user install node and npm via node version-manager
