@@ -12,13 +12,11 @@ local:
 .PHONY: local
 
 docker-push: default
-	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push ${NAME}:latest 
-		&& docker push ${NAME}:${VERSION}
+		&& docker buildx build --push --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 .PHONY: docker-push
 
 docker-run: local
