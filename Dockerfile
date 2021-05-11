@@ -185,16 +185,13 @@ RUN apt-get update \
     libsqlite3-dev
 
 # Download and install chromium for puppetteer
-ENV CHROMIUM_DOWNLOAD_HOST=https://storage.googleapis.com
-# Get this from `curl https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2FLAST_CHANGE?alt=media`
-ENV CHROMIUM_REVISION=881257
-# TODO: support ARM architecture
-ENV CHROMIUM_ARCH=Linux_x64
-
-RUN wget --no-check-certificate -q -O chrome.zip $CHROMIUM_DOWNLOAD_HOST/chromium-browser-snapshots/$CHROMIUM_ARCH/$CHROMIUM_REVISION/chrome-linux.zip \
+COPY scripts/download-chrome.sh .
+RUN bash ./download-chrome.sh ${TARGETARCH} \
     && unzip chrome.zip \
     && rm chrome.zip \
-    && ln -s $PWD/chrome-linux/chrome /usr/bin/chromium-browser
+    && mv ./chrome-linux /home/$USER \
+    && chown -R $USER /home/$USER/chrome-linux \
+    && ln -s /home/$USER/chrome-linux/chrome /usr/bin/chromium-browser
 
 USER $USER
 

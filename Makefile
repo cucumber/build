@@ -7,7 +7,7 @@ default:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
 .PHONY: default
 
-local: default
+local:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --load .
 .PHONY: local
 
