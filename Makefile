@@ -1,5 +1,5 @@
 NAME      := cucumber/cucumber-build
-VERSION   := pr-12
+VERSION   := pr-12.1
 DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
 PLATFORMS ?= ${DEFAULT_PLATFORM}
 
