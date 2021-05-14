@@ -30,6 +30,8 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,limux/arm64
-          tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:{{ env.version }}
+          labels:
+            version: ${{ env.version } }
+          tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
       - name: Tag the commit
-        run: git tag {{ env.version }} && git push --tags
+        run: git tag ${{ env.version }} && git push --tags
