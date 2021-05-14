@@ -56,7 +56,6 @@ RUN apt-get update \
     tree \
     unzip \
     upx \
-    wget \
     xmlstarlet
 
 # Create a cukebot user. Some tools (Bundler, npm publish) don't work properly
@@ -90,15 +89,17 @@ RUN echo "gem: --no-document" > ~/.gemrc \
     && chown -R $USER:$USER /usr/bin
 
 # Install and configure pip2, twine and behave
-RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2 \
+RUN curl -sL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
+    && echo "0adb06840d8a9e9d8edc4bb9137d1ca99e75fd61 *get-pip.py" | sha1sum -c --quiet - \
+    && cat get-pip.py | python2 \
+    && rm get-pip.py \
     && pip install pipenv \
     && pip install twine \
     && pip install behave
-#    && chown -R $USER:$USER /usr/lib/python2.7/site-packages \
-#    && mkdir -p /usr/man && chown -R $USER:$USER /usr/man
 
 # Configure Perl
-RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm \
+RUN curl -sL https://cpanmin.us/ -o /usr/local/bin/cpanm \
+    && cd /usr/local/bin/ && echo "09c682a9c6d7c47967bba91909378072921c12d0  cpanm" | sha1sum -c --quiet - && cd /app \
     && chmod +x /usr/local/bin/cpanm \
     && cpanm --notest Carton \
     && rm -rf /root/.cpanm
@@ -142,17 +143,21 @@ RUN apt-get update \
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 5.0
 
-RUN curl -SL -o- https://dot.net/v1/dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+RUN curl -SL -o dotnet-install.sh https://dot.net/v1/dotnet-install.sh \
+    && echo "55ac7b5c29b9be1e64dc0f1b7283c76d75e9b095  dotnet-install.sh" | sha1sum -c --quiet - \ 
+    && cat dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
+    && rm dotnet-install.sh
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet --list-sdks
 
 # Install Berp
-RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
+RUN curl -sL https://www.nuget.org/api/v2/package/Berp/1.1.1 -o berp.zip \
+    && echo "f558782cf8eb9143ab8e7f7e3ad1607f7fea512e  berp.zip" | sha1sum -c --quiet - \
     && mkdir -p /var/lib/berp \
-    && unzip 1.1.1 -d /var/lib/berp/1.1.1 \
-    && rm 1.1.1
+    && unzip berp.zip -d /var/lib/berp/1.1.1 \
+    && rm berp.zip
 
 # Install JS
 ## Install yarn without node
@@ -161,6 +166,7 @@ RUN apt-get update \
 
 # Install sbt
 RUN curl -SL --output sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb \
+    && echo "1823777aa853fefe2e535f2b1eb9ec0ad89d8621  sbt.deb" | sha1sum -c --quiet - \
     && dpkg -i sbt.deb \
     && rm -f sbt.deb
 # Configure sbt
@@ -180,9 +186,11 @@ RUN bash ./download-chrome.sh
 COPY scripts/install-mono.sh .
 RUN bash ./install-mono.sh
 
+# TODO: checksum
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
+    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \ 
     && dpkg -i erlang.deb \
     && rm -f erlang.deb \
     && apt-get update \
@@ -193,12 +201,18 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
 
 USER $USER
 
+# TODO: checksum
 ## As a user install node and npm via node version-manager
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash \
+WORKDIR /home/$USER
+RUN curl -o install-nvm.sh https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh \
+    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \ 
+    && cat install-nvm.sh | bash \
+    && rm install-nvm.sh \
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
     && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
     && nvm install 12.16.2 \
     && nvm install-latest-npm
+WORKDIR /app
 
 CMD ["/bin/bash"]
