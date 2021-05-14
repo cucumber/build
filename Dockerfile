@@ -40,7 +40,6 @@ RUN apt-get update \
     libxslt-dev \
     make \
     maven \
-    mono-devel \
     openjdk-8-jdk \
     openjdk-11-jdk \
     openssl \
@@ -75,8 +74,10 @@ RUN addgroup --gid "$GID" "$USER" \
     --shell /bin/bash \
     "$USER"
 
+ARG TARGETARCH
+
 # Configure Maven and Java
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-$TARGETARCH
 COPY --chown=$USER toolchains.xml /home/$USER/.m2/toolchains.xml
 COPY --chown=$USER settings.xml /home/$USER/.m2/settings.xml
 
@@ -153,6 +154,32 @@ RUN wget https://www.nuget.org/api/v2/package/Berp/1.1.1 \
     && unzip 1.1.1 -d /var/lib/berp/1.1.1 \
     && rm 1.1.1
 
+# Install JS
+## Install yarn without node
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends yarn
+
+# Install sbt
+RUN curl -SL --output sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb \
+    && dpkg -i sbt.deb \
+    && rm -f sbt.deb
+# Configure sbt
+COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
+
+# Install sqlite3 - Required for cucumber-rails
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends \
+    ca-certificates \
+    sqlite3 \
+    libsqlite3-dev
+
+# Download and install chromium for puppetteer
+COPY scripts/download-chrome.sh .
+RUN bash ./download-chrome.sh
+
+COPY scripts/install-mono.sh .
+RUN bash ./install-mono.sh
+
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
@@ -163,41 +190,6 @@ RUN curl -SL --output erlang.deb https://packages.erlang-solutions.com/erlang-so
     esl-erlang \
     elixir \
     && rm -rf /var/lib/apt/lists/*
-
-# Install JS
-## Install yarn without node
-RUN apt-get update \
-    && apt-get install --assume-yes --no-install-recommends yarn
-
-# Install sbt
-RUN curl -SL --output sbt.deb https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb \
-    && dpkg -i sbt.deb \
-    && rm -f sbt.deb 
-# Configure sbt
-COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
-
-# dependencies for chrome headless, wich is required for puppeteer
-# the following has been inspired by https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
-
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install --assume-yes --no-install-recommends \
-    google-chrome-stable \
-    fonts-ipafont-gothic \
-    fonts-wqy-zenhei \
-    fonts-thai-tlwg \
-    fonts-kacst \
-    fonts-freefont-ttf \
-    libxss1 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install sqlite3 - Required for cucumber-rails
-RUN apt-get update \
-    && apt-get install --assume-yes --no-install-recommends \
-    ca-certificates \
-    sqlite3 \
-    libsqlite3-dev
 
 USER $USER
 

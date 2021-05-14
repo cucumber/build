@@ -1,5 +1,5 @@
 NAME      := cucumber/cucumber-build
-VERSION   := 0.3.0
+VERSION   := pr-12.1
 DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo "linux/amd64")
 PLATFORMS ?= ${DEFAULT_PLATFORM}
 
@@ -7,16 +7,19 @@ default:
 	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
 .PHONY: default
 
+local:
+	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --load .
+.PHONY: local
+
 docker-push: default
-	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 	[ -d '../secrets' ] || git clone keybase://team/cucumberbdd/secrets ../secrets
 	git -C ../secrets pull
 	. ../secrets/docker-hub-secrets.sh \
 		&& docker login --username $${DOCKER_HUB_USER} --password $${DOCKER_HUB_PASSWORD} \
-		&& docker push --tag ${NAME}:latest --tag ${NAME}:${VERSION}
+		&& docker buildx build --push --platform=${PLATFORMS} --tag ${NAME}:latest --tag ${NAME}:${VERSION} .
 .PHONY: docker-push
 
-docker-run: default
+docker-run: local
 	docker run \
 	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
 	  --user 1000 \
