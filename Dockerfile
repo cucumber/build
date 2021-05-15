@@ -186,7 +186,6 @@ RUN bash ./download-chrome.sh
 COPY scripts/install-mono.sh .
 RUN bash ./install-mono.sh
 
-# TODO: checksum
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
@@ -201,10 +200,9 @@ RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
 
 USER $USER
 
-# TODO: checksum
 ## As a user install node and npm via node version-manager
 WORKDIR /home/$USER
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install-nvm.sh \
+RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install-nvm.sh \
     && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \ 
     && cat install-nvm.sh | bash \
     && export NVM_DIR="$HOME/.nvm" \
