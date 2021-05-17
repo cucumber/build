@@ -11,6 +11,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     name: Publish docker image
+    environment: Release
 
     steps:
       - uses: actions/checkout@v2
