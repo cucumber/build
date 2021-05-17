@@ -30,6 +30,21 @@ The Docker image is published to a public dockerhub repository via an [automated
 To publish a new version of the image:
 
 1. Update the version number in the [release.yaml](./.github/workflows/release.yaml) workflow.
-1. Update the [CHANGELOG.md](./CHANGELOG.md) file, adding your changes in a section beneath the new release number.
-1. Submit a pull request to the `release` branch.
-1. Wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge your change and kick off the release.
+2. Update the [CHANGELOG.md](./CHANGELOG.md) file, adding your changes in a section beneath the new release number.
+3. Commit and tag:
+
+```
+echo "What's the version number you want to release?"
+read VERSION
+git add . && git commit -m "Release v$VERSION"
+git tag v$VERSION
+git push && git push --tags
+```
+
+4. Submit a pull request to the `release` branch.
+
+```
+gh pr create --title "Release v$VERSION" --base release --head v$VERSION
+```
+
+5. Wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge your change and kick off the release.
