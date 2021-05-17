@@ -51,7 +51,7 @@ git push && git push --tags
 ```
 git checkout -b release-$VERSION
 git push --set-upstream origin release-$VERSION
-gh pr create --title "Release v$VERSION" --body "" --base release --head v$VERSION
+gh pr create --title "Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
 ```
 
 6. Wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge your change which will trigger an automatic release.
