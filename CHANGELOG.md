@@ -7,14 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.1]
+## [0.4.2]
 
 - Provide a multi-arch image (amd64 and arm64) to allow for Apple M1 silicon [#11](https://github.com/cucumber/cucumber-build/issues/11)
 - Check hash of all dependencies installed via curl/wget [#14](https://github.com/cucumber/cucumber-build/issues/14)
 
-## [0.4.0]
-
-Botched release
 
 ## [0.3.0]
 
