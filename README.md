@@ -29,6 +29,7 @@ The Docker image is published to a public dockerhub repository via an [automated
 
 To publish a new version of the image:
 
+0. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/ -signing-commits) - all pull requests to the `release` branch must be signed.
 1. Choose a version number, using [semantic versioning](https://semver.org/).
 
 ```
@@ -41,8 +42,8 @@ read VERSION
 4. Commit and tag:
 
 ```
-git add . && git commit -m "Release v$VERSION"
-git tag v$VERSION
+git add . && git commit -S -m "Release v$VERSION"
+git tag -s v$VERSION
 git push && git push --tags
 ```
 
@@ -51,7 +52,7 @@ git push && git push --tags
 ```
 git checkout -b release-$VERSION
 git push --set-upstream origin release-$VERSION
-gh pr create --title "Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
+gh pr create --title "📦 Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
 ```
 
 6. Wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge your change which will trigger an automatic release.
