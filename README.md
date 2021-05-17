@@ -42,6 +42,7 @@ read VERSION
 4. Commit and tag:
 
 ```
+git checkout main
 git add . && git commit -S -m "Release v$VERSION"
 git tag -s v$VERSION -m "Release v$VERSION"
 git push && git push --tags
