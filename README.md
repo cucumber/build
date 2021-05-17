@@ -47,10 +47,12 @@ git tag -s v$VERSION -m "Release v$VERSION"
 git push && git push --tags
 ```
 
-5. Submit a pull request to the protected `release` branch.
+5. Submit a pull request to the protected `release` branch. You'll need to squash the commits if any of them are not signed:
 
 ```
+git checkout release
 git checkout -b release-$VERSION
+git merge --squash v$VERSION
 git push --set-upstream origin release-$VERSION
 gh pr create --title "📦 Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
 ```
