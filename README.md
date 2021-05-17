@@ -29,7 +29,7 @@ The Docker image is published to a public dockerhub repository via an [automated
 
 To publish a new version of the image:
 
-0. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/ -signing-commits) - all pull requests to the `release` branch must be signed.
+0. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all pull requests to the `release` branch must be signed.
 1. Choose a version number, using [semantic versioning](https://semver.org/).
 
 ```
@@ -48,11 +48,19 @@ git tag -s v$VERSION -m "Release v$VERSION"
 git push && git push --tags
 ```
 
-5. Submit a pull request to the protected `release` branch.
+5. Squash the commits to be released into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
 
 ```
+git checkout release
 git checkout -b release-$VERSION
+git merge --squash v$VERSION
+git commit -S -m "Release v$VERSION"
 git push --set-upstream origin release-$VERSION
+```
+
+6. Submit a pull request to the protected `release` branch. You [need to install](https://github.com/cli/cli#installation) the GitHub CLI tool, `gh`.
+
+```
 gh pr create --title "📦 Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
 ```
 
