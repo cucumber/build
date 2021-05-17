@@ -29,7 +29,7 @@ The Docker image is published to a public dockerhub repository via an [automated
 
 To publish a new version of the image:
 
-0. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/ -signing-commits) - all pull requests to the `release` branch must be signed.
+0. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all pull requests to the `release` branch must be signed.
 1. Choose a version number, using [semantic versioning](https://semver.org/).
 
 ```
