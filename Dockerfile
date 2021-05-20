@@ -183,9 +183,6 @@ RUN apt-get update \
 COPY scripts/download-chrome.sh .
 RUN bash ./download-chrome.sh
 
-COPY scripts/install-mono.sh .
-RUN bash ./install-mono.sh
-
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
