@@ -1,3 +1,5 @@
+![Build](https://github.com/cucumber/build/actions/workflows/build.yml/badge.svg)
+
 # Cucumber Build
 
 Docker image used to build and release projects in the Cucumber organization.
