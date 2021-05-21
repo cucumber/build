@@ -1,4 +1,4 @@
-![Build](https://github.com/cucumber/build/actions/workflows/build.yml/badge.svg)
+![Build](https://github.com/cucumber/build/actions/workflows/build.yaml/badge.svg)
 
 # Cucumber Build
 
