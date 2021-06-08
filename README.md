@@ -39,7 +39,7 @@ To publish a new version of the image:
    ```
 1. Update the version number in the [release.yaml](./.github/workflows/release.yaml) workflow.
 1. Update the [CHANGELOG.md](./CHANGELOG.md) file, adding your changes in a section beneath the new release number.
-1. Commit your changes
+1. Commit your changes to `main`
    ```
    git checkout main
    git add . && git commit -S -m "Prepare to release v$VERSION"
