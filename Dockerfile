@@ -144,7 +144,7 @@ RUN apt-get update \
 ENV DOTNET_SDK_VERSION 5.0
 
 RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh \
-    && echo "55ac7b5c29b9be1e64dc0f1b7283c76d75e9b095  dotnet-install.sh" | sha1sum -c --quiet - \ 
+    && echo "25b457ce8170a34f74649632660c40a5cfd355a1  dotnet-install.sh" | sha1sum -c --quiet - \ 
     && cat dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
     && rm dotnet-install.sh
@@ -182,9 +182,6 @@ RUN apt-get update \
 # Download and install chromium for puppetteer
 COPY scripts/download-chrome.sh .
 RUN bash ./download-chrome.sh
-
-COPY scripts/install-mono.sh .
-RUN bash ./install-mono.sh
 
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
