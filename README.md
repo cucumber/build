@@ -49,7 +49,7 @@ To publish a new version of the image:
    ```
    git checkout release
    git checkout -b release-$VERSION
-   git merge --squash v$VERSION
+   git merge --squash main
    git commit -S -m "Release v$VERSION"
    git push --set-upstream origin release-$VERSION
    ```
