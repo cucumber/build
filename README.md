@@ -45,7 +45,7 @@ To publish a new version of the image:
    git add . && git commit -S -m "Prepare to release v$VERSION"
    git push
    ```
-1. Squash the commits to be released into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
+1. Create a branch for the release, squashing the commits into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
    ```
    git checkout release
    git checkout -b release-$VERSION
