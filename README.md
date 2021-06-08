@@ -27,13 +27,14 @@ Now try running the build with multiple platforms, e.g.
 
 # Publishing a new version of the image
 
-The Docker image is published to a public dockerhub repository via an [automated Continuous Deployment workflow](./.github/workflows/release.yaml) running of a protected [release](https://github.com/cucumber/build/tree/release) branch.
+The Docker image is published to a public dockerhub repository via an [automated Continuous Deployment workflow](./.github/workflows/release.yaml) running off a protected [release](https://github.com/cucumber/build/tree/release) branch.
 
 To make a release, you make a pull request to the `release` branch, and wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge it.
 
 Here's the steps in detail:
 
 1. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all commits to the `release` branch must be signed.
+
 1. Choose a version number, using [semantic versioning](https://semver.org/).
    ```
    echo "What's the version number you want to release?"
@@ -41,7 +42,7 @@ Here's the steps in detail:
    ```
 1. Update the version number in the [release.yaml](./.github/workflows/release.yaml) workflow.
 1. Update the [CHANGELOG.md](./CHANGELOG.md) file, adding your changes in a section beneath the new release number.
-1. Commit your changes to `main`
+1. Commit your changes
    ```
    git checkout main
    git add . && git commit -S -m "Prepare to release v$VERSION"
