@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove Mono [#28](https://github.com/cucumber/cucumber-build/pull/28)
 
-- Remove Mono [#28](https://github.com/cucumber/cucumber-build/pull/28)
-
 ## [0.4.4]
 
 - Provide a multi-arch image (amd64 and arm64) to allow for Apple M1 silicon [#11](https://github.com/cucumber/cucumber-build/issues/11)
