@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.1]
 
+- Add symlink for `chromium-browser` [#31](https://github.com/cucumber/cucumber-build/pull/31)
+
+## [0.5.0]
+
 - Remove Mono [#28](https://github.com/cucumber/cucumber-build/pull/28)
 
 ## [0.4.4]
@@ -26,3 +30,4 @@ Experimental arm64 build
 ## [0.1.0]
 
 Initial version
+

@@ -27,11 +27,14 @@ Now try running the build with multiple platforms, e.g.
 
 # Publishing a new version of the image
 
-The Docker image is published to a public dockerhub repository via an [automated Continuous Deployment workflow](./.github/workflows/release.yaml).
+The Docker image is published to a public dockerhub repository via an [automated Continuous Deployment workflow](./.github/workflows/release.yaml) running off a protected [release](https://github.com/cucumber/build/tree/release) branch.
 
-To publish a new version of the image:
+To make a release, you make a pull request to the `release` branch, and wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge it.
 
-1. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all pull requests to the `release` branch must be signed.
+Here's the steps in detail:
+
+1. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all commits to the `release` branch must be signed.
+
 1. Choose a version number, using [semantic versioning](https://semver.org/).
    ```
    echo "What's the version number you want to release?"
@@ -45,11 +48,11 @@ To publish a new version of the image:
    git add . && git commit -S -m "Prepare to release v$VERSION"
    git push
    ```
-1. Squash the commits to be released into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
+1. Create a branch for the release, squashing the commits into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
    ```
    git checkout release
    git checkout -b release-$VERSION
-   git merge --squash v$VERSION
+   git merge --squash main
    git commit -S -m "Release v$VERSION"
    git push --set-upstream origin release-$VERSION
    ```
