@@ -207,7 +207,7 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
     && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
-    && nvm install 12.16.2 \
+    && nvm install 12.22.1 \
     && nvm install-latest-npm \
     && rm install-nvm.sh
 WORKDIR /app
