@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.2]
 
-- Use latest Node 12 LTS version [#33](https://github.com/cucumber/build/pull/33)
+- Bump Node version from 12.16.2 to 12.22.1 [#33](https://github.com/cucumber/build/pull/33)
 
 ## [0.5.1]
 
