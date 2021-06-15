@@ -5,7 +5,7 @@ on:
     branches: [release]
 
 env:
-  version: 0.5.0
+  version: 0.5.2
 
 jobs:
   docker-build:

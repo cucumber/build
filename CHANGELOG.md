@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2]
+
+- Use latest Node 12 LTS version [#33](https://github.com/cucumber/build/pull/33)
+
 ## [0.5.1]
 
 - Add symlink for `chromium-browser` [#31](https://github.com/cucumber/cucumber-build/pull/31)
