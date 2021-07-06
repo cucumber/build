@@ -200,9 +200,8 @@ RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
 # Install Dart
 ENV DART_SDK /usr/lib/dart
 RUN apt-get install apt-transport-https
-RUN sh -c 'curl -s -L https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-RUN sh -c 'curl -s -L https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list \ 
-	-o /etc/apt/sources.list.d/dart_stable.list'
+RUN curl -sSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN curl -sSL https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list -o /etc/apt/sources.list.d/dart_stable.list
 RUN apt-get update
 RUN apt-get install dart
 ENV PATH $DART_SDK/bin:$PATH
