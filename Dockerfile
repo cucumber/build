@@ -182,6 +182,7 @@ RUN apt-get update \
 # Download and install chromium for puppetteer
 COPY scripts/download-chrome.sh .
 RUN bash ./download-chrome.sh
+RUN rm ./download-chrome.sh
 # Puppetteer seems to need the binary to be called chromium-browser
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 
@@ -198,13 +199,10 @@ RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
     && rm -f erlang.deb
 
 # Install Dart
-ENV DART_SDK /usr/lib/dart
-RUN apt-get install apt-transport-https
-RUN curl -sSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN curl -sSL https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list -o /etc/apt/sources.list.d/dart_stable.list
-RUN apt-get update
-RUN apt-get install dart
-ENV PATH $DART_SDK/bin:$PATH
+RUN apt-get update && apt-get install wget
+COPY scripts/install-dart.sh .
+RUN bash ./install-dart.sh
+RUN rm ./install-dart.sh
 
 USER $USER
 
