@@ -1,13 +1,18 @@
 set -e
 
+# arm or intel?
+arch=$([ "$TARGETARCH" == "amd64" ] && echo "x64" || echo $TARGETARCH)
+
 # Creating temp file
 tdir=$(mktemp -d -t dart.XXX)
-tzip="$tdir/dartsdk-linux-arm64-release.zip"
-tsha="$tdir/dartsdk-linux-arm64-release.zip.sha256sum"
+zip="dartsdk-linux-$arch-release.zip"
+tzip="$tdir/$zip"
+sha="dartsdk-linux-$arch-release.zip.sha256sum"
+tsha="$tdir/$sha"
 
 # Downloading latest stable dist
-wget -qO "$tzip" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-$TARGETARCH-release.zip"
-wget -qO "$tsha" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-$TARGETARCH-release.zip.sha256sum"
+wget -qO "$tzip" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/$zip"
+wget -qO "$tsha" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/$sha"
 
 chmod -R +rwx $tdir
 cd $tdir
