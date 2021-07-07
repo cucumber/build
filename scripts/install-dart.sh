@@ -6,8 +6,8 @@ tzip="$tdir/dartsdk-linux-arm64-release.zip"
 tsha="$tdir/dartsdk-linux-arm64-release.zip.sha256sum"
 
 # Downloading latest stable dist
-wget -qO "$tzip" 'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-arm64-release.zip'
-wget -qO "$tsha" 'https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-arm64-release.zip.sha256sum'
+wget -qO "$tzip" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-$TARGETARCH-release.zip"
+wget -qO "$tsha" "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-$TARGETARCH-release.zip.sha256sum"
 
 chmod -R +rwx $tdir
 cd $tdir
