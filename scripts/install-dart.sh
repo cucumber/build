@@ -6,8 +6,8 @@ arch=$([ "$TARGETARCH" == "amd64" ] && echo "x64" || echo $TARGETARCH)
 # Creating temp file
 tdir=$(mktemp -d -t dart.XXX)
 zip="dartsdk-linux-$arch-release.zip"
-tzip="$tdir/$zip"
 sha="dartsdk-linux-$arch-release.zip.sha256sum"
+tzip="$tdir/$zip"
 tsha="$tdir/$sha"
 
 # Downloading latest stable dist
