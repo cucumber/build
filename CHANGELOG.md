@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Add Dart [#36](https://github.com/cucumber/build/pull/36)
+- Bump Node version from 12.22.1 to 14.17.3 [#37](https://github.com/cucumber/build/pull/37)
 
 ## [0.5.2]
 
