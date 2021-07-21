@@ -23,7 +23,7 @@ jobs:
         id: next-release
         uses: mattwynne/changelog-action@v1
         with:
-          args: latest
+          args: --help
       # if the changelog shows a new release, go!
       # * update release.yaml
       # * ...
