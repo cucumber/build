@@ -3,7 +3,7 @@ name: Pre-release
 on:
   push:
     branches: [automate-prerelase]
-  pull-request:
+  pull_request:
 
 jobs:
   update-release-yaml:
