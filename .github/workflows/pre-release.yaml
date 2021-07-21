@@ -12,13 +12,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      # - name: read the current version from the release.yaml
-      #   id: current-release
-      #   uses: cumulusds@v0.0.0
-      #   with:
-      #     file: .github/workflows/release.yaml
-      #     version: env.version
-      # - run: echo {{ steps.current-release.outputs.version }}
+      - name: read the current version from the release.yaml
+        id: current-release
+        uses: cumulusds@v0.0.0
+        with:
+          file: .github/workflows/release.yaml
+          version: env.version
+      - run: echo {{ steps.current-release.outputs.version }}
       # read latest version from the changelog
       # if the changelog shows a new release, go!
       # * update release.yaml
