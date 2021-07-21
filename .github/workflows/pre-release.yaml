@@ -18,7 +18,7 @@ jobs:
         with:
           file: .github/workflows/release.yaml
           version: env.version
-      - run: echo {{ steps.current-release.outputs.version }}
+      - run: echo ${{ steps.current-release.outputs.version }}
       # read latest version from the changelog
       # if the changelog shows a new release, go!
       # * update release.yaml
