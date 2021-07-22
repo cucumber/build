@@ -26,7 +26,7 @@ jobs:
           args: latest
       - run: |
           echo current release: ${{ steps.current-release.outputs.version }}
-          echo current release: ${{ steps.next-version.outputs.output }}
+          echo next release: ${{ steps.next-release.outputs.output }}
       # if the changelog shows a new release, go!
       # * update release.yaml
       # * ...
