@@ -21,7 +21,7 @@ jobs:
       - run: echo ${{ steps.current-release.outputs.version }}
       - name: read latest version from the changelog
         id: next-release
-        uses: mattwynne/changelog-action@v1.1
+        uses: mattwynne/changelog-action@v1.2
         with:
           args: latest
       - run: |
