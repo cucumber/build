@@ -23,7 +23,10 @@ jobs:
         id: next-release
         uses: mattwynne/changelog-action@v1.1
         with:
-          args: --help
+          args: latest
+      - run: |
+        echo current release: ${{ steps.current-release.outputs.version }}
+        echo current release: ${{ steps.next-version.outputs.output }}
       # if the changelog shows a new release, go!
       # * update release.yaml
       # * ...
