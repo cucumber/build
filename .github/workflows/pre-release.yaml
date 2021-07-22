@@ -28,5 +28,13 @@ jobs:
           echo current release: ${{ steps.current-release.outputs.version }}
           echo next release: ${{ steps.next-release.outputs.output }}
       # if the changelog shows a new release, go!
-      # * update release.yaml
+      - name: Update release.yaml
+        if: steps.current-release.outputs.version != steps.next-release.outputs.output
+        uses: fjogeleit/yaml-update-action@master
+        with:
+          valueFile: '.github/workflows/release.yaml'
+          propertyPath: 'env.version'
+          value: ${{ steps.next-release.outputs.output }}
+          commitChange: false
+          updateFile: true
       # * ...
