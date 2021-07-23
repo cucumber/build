@@ -23,11 +23,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: read the current version from the release.yaml
         id: current-release
-        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        uses: mikefarah/yq@master
         with:
-          file: .github/workflows/release.yaml
-          version: env.version
-      - run: echo ${{ steps.current-release.outputs.version }}
+          cmd: yq eval '.env.version' '.github/workflows/release.yaml'
+      - run: echo ${{ steps.current-release.outputs.result }}
       - name: read latest version from the changelog
         id: next-release
         uses: mattwynne/changelog-action@v1.2
