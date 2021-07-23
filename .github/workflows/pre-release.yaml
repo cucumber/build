@@ -57,6 +57,6 @@ jobs:
             See diff for details.
           team-reviewers: "@cucumber/build"
       - run: |
-        git checkout automate-pre-release
-        git merge release-${{ env.next_version }}
-        git push
+          git checkout automate-pre-release
+          git merge release-${{ env.next_version }}
+          git push
