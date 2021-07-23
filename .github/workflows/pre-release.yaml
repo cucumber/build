@@ -11,7 +11,7 @@ name: Pre-release
 
 on:
   push:
-    branches: [automate-prerelase]
+    branches: [automate-pre-relase]
   pull_request:
 
 jobs:
@@ -33,18 +33,18 @@ jobs:
         with:
           args: latest
   
-  create-release-pr:
-    runs-on: ubuntu-latest
-    name: Create Release PR
-    needs: versions
-    if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
-    env:
-      next_version: ${{ needs.versions.outputs.next-version }}
-    steps:
-      - uses: actions/checkout@v2
-        ref: automate-pre-release
-      - name: Update VERSION
-        run: echo $next_version > VERSION
+  # create-release-pr:
+  #   runs-on: ubuntu-latest
+  #   name: Create Release PR
+  #   needs: versions
+  #   if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
+  #   env:
+  #     next_version: ${{ needs.versions.outputs.next-version }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       ref: automate-pre-release
+  #     - name: Update VERSION
+  #       run: echo $next_version > VERSION
       # - uses: stefanzweifel/git-auto-commit-action@v4
       #   with:
       #     commit_message: Release ${{ env.next_version }}
