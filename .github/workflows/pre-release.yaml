@@ -24,11 +24,9 @@ jobs:
       next-version: ${{ steps.next-release.outputs.output }}
     steps:
       - uses: actions/checkout@v2
-      - name: read the current version from the release.yaml
+      - name: read the current version from VERSION file
         id: current-release
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq eval '.env.version' '.github/workflows/release.yaml'
+        run: echo "::set-output name=result::$(cat VERSION)"
       - name: read latest version from the changelog
         id: next-release
         uses: mattwynne/changelog-action@v1.2
@@ -44,10 +42,8 @@ jobs:
       next_version: ${{ needs.versions.outputs.next-version }}
     steps:
       - uses: actions/checkout@v2
-      - name: Update release.yaml
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
+      - name: Update VERSION
+        run: echo $next_version > VERSION
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
