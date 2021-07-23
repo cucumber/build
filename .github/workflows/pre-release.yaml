@@ -50,9 +50,13 @@ jobs:
           commit-message: "Release ${{ env.next_version }}"
           branch: release-${{ env.next_version }}
           title: "Release ${{ env.next_version }}"
-          base: automate-pre-release
+          base: release
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 
             See diff for details.
           team-reviewers: "@cucumber/build"
+      - run: |
+        git checkout automate-pre-release
+        git merge release-${{ env.next_version }}
+        git push
