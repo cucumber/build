@@ -50,7 +50,7 @@ jobs:
           commit-message: "Release ${{ env.next_version }}"
           branch: release-${{ env.next_version }}
           title: "Release ${{ env.next_version }}"
-          base: automate-prerelease
+          base: automate-pre-release
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 
