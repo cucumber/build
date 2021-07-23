@@ -35,31 +35,19 @@ jobs:
         with:
           args: latest
   
-  update-release-yaml:
-    runs-on: ubuntu-latest
-    name: Update release.yaml
-    needs: versions
-    if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
-    env:
-      released_version: ${{ needs.versions.outputs.released-version }}
-      next_version: ${{ needs.versions.outputs.next-version }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: mikefarah/yq@master
-        with:
-          cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
-      - run: cat .github/workflows/release.yaml
-
   create-release-pr:
     runs-on: ubuntu-latest
     name: Create Release PR
-    needs: 
-      - update-release-yaml
-      - versions
+    needs: versions
     if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
     env:
       next_version: ${{ needs.versions.outputs.next-version }}
     steps:
+      - uses: actions/checkout@v2
+      - name: Update release.yaml
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
