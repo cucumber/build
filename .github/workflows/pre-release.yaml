@@ -49,4 +49,27 @@ jobs:
         with:
           cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
       - run: cat .github/workflows/release.yaml
-      # # * ...
+      - 
+      - run: |
+          git checkout main
+          git add . && git commit -S -m "Prepare to release v$next_version"
+
+  create-release-pr:
+    runs-on: ubuntu-latest
+    name: Create Release PR
+    needs: update-release-yaml, versions
+    if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
+    env:
+      next_version: ${{ needs.versions.outputs.next-version }}
+    steps:
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "Release ${{ env.next_version }}"
+          branch: release/${{ env.next_version }}
+          title: "Release ${{ env.next_version }}"
+          body: |
+            Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
+
+            See diff for details.
+          team-reviewers: @cucumber/build
