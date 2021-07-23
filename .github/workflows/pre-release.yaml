@@ -41,8 +41,8 @@ jobs:
     needs: versions
     if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
     env:
-      released_version: needs.versions.outputs.released-version 
-      next_version: needs.versions.outputs.next-version 
+      released_version: ${{ needs.versions.outputs.released-version }}
+      next_version: ${{ needs.versions.outputs.next-version }}
     steps:
       - uses: actions/checkout@v2
       - uses: mikefarah/yq@master
