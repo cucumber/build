@@ -44,6 +44,8 @@ jobs:
       next_version: ${{ needs.versions.outputs.next-version }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
       - name: Update release.yaml
         uses: mikefarah/yq@master
         with:
