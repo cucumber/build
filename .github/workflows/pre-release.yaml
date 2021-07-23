@@ -36,11 +36,11 @@ jobs:
       - run: |
           echo current release: $released_version
           echo next release: $next_version
-      # # if the changelog shows a new release, go!
-      # - name: Update release.yaml
-      #   if: $current-version != $next-version
-      #   uses: mikefarah/yq@master
-      #   with:
-      #     cmd: yq eval '.env.version = "$next-version"' --inplace .github/workflows/release.yaml
-      # - run: cat .github/workflows/release.yaml
+      # if the changelog shows a new release, go!
+      - name: Update release.yaml
+        if: $released-version != $next-version
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval '.env.version = "$next-version"' --inplace .github/workflows/release.yaml
+      - run: cat .github/workflows/release.yaml
       # # * ...
