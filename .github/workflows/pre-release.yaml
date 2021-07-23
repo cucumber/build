@@ -26,16 +26,16 @@ jobs:
         uses: mikefarah/yq@master
         with:
           cmd: yq eval '.env.version' '.github/workflows/release.yaml'
-      - run: echo "released-version=${{ steps.current-release.outputs.result }}" >> $GITHUB_ENV
+      - run: echo "released_version=${{ steps.current-release.outputs.result }}" >> $GITHUB_ENV
       - name: read latest version from the changelog
         id: next-release
         uses: mattwynne/changelog-action@v1.2
         with:
           args: latest
-      - run: echo "next-version=${{ steps.next-release.outputs.output }}" >> $GITHUB_ENV
+      - run: echo "next_version=${{ steps.next-release.outputs.output }}" >> $GITHUB_ENV
       - run: |
-          echo current release: $released-version
-          echo next release: $next-version
+          echo current release: $released_version
+          echo next release: $next_version
       # # if the changelog shows a new release, go!
       # - name: Update release.yaml
       #   if: $current-version != $next-version
