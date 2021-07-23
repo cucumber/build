@@ -47,6 +47,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mikefarah/yq@master
         with:
-          cmd: yq eval '.env.version = "$next-version"' --inplace .github/workflows/release.yaml
+          cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
       - run: cat .github/workflows/release.yaml
       # # * ...
