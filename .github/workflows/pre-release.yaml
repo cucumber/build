@@ -49,10 +49,6 @@ jobs:
         with:
           cmd: yq eval '.env.version = "${{ env.next_version }}"' --inplace .github/workflows/release.yaml
       - run: cat .github/workflows/release.yaml
-      - 
-      - run: |
-          git checkout main
-          git add . && git commit -S -m "Prepare to release v$next_version"
 
   create-release-pr:
     runs-on: ubuntu-latest
