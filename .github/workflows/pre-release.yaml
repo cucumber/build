@@ -44,8 +44,6 @@ jobs:
       next_version: ${{ needs.versions.outputs.next-version }}
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
       - name: Update release.yaml
         uses: mikefarah/yq@master
         with:
@@ -56,6 +54,7 @@ jobs:
           commit-message: "Release ${{ env.next_version }}"
           branch: release/${{ env.next_version }}
           title: "Release ${{ env.next_version }}"
+          base: ${{ github.ref }}
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 
