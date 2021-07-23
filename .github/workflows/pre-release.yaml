@@ -1,5 +1,14 @@
 name: Pre-release
 
+# Prepares a new release of the build image.
+# 
+# To trigger it, simply change the CHANGELOG.md file, replacing the
+# "Unreleased" header with the header with the new release's 
+# version number.
+#
+# The workflow will automatically prepare a pull request to the `release` branch.
+#
+
 on:
   push:
     branches: [automate-prerelase]
