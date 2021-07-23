@@ -72,4 +72,4 @@ jobs:
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 
             See diff for details.
-          team-reviewers: @cucumber/build
+          team-reviewers: "@cucumber/build"
