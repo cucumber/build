@@ -42,21 +42,20 @@ jobs:
       next_version: ${{ needs.versions.outputs.next-version }}
     steps:
       - uses: actions/checkout@v2
+        ref: automate-pre-release
       - name: Update VERSION
         run: echo $next_version > VERSION
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+        commit_message: Release ${{ env.next_version }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: "Release ${{ env.next_version }}"
-          branch: release-${{ env.next_version }}
-          title: "Release ${{ env.next_version }}"
+          branch: automate-pre-release
           base: release
+          title: "Release ${{ env.next_version }}"
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 
             See diff for details.
           team-reviewers: "@cucumber/build"
-      - run: |
-          git checkout automate-pre-release
-          git merge release-${{ env.next_version }}
-          git push
