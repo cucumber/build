@@ -52,7 +52,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           base: release
-          branch: release-${{ env.next_version }}
+          branch: main
           title: "Release ${{ env.next_version }}"
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
