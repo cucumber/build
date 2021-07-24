@@ -49,8 +49,8 @@ jobs:
         with:
           commit_message: Release ${{ env.next_version }}
       - run: |
-        git checkout release
-        git merge main
+          git checkout release
+          git merge main
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
