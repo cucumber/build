@@ -52,7 +52,8 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: release
+          base: release
+          branch: release-${{ env.next_version }}
           title: "Release ${{ env.next_version }}"
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
