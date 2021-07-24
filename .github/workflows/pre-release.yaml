@@ -1,0 +1,61 @@
+name: Pre-release
+
+# Prepares a new release of the build image.
+# 
+# To trigger it, simply change the CHANGELOG.md file, replacing the
+# "Unreleased" header with the header with the new release's 
+# version number.
+#
+# The workflow will automatically prepare a pull request to the `release` branch.
+#
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  versions:
+    runs-on: ubuntu-latest
+    name: Get version numbers
+    outputs:
+      released-version: ${{ steps.current-release.outputs.result }}
+      next-version: ${{ steps.next-release.outputs.output }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: read the current version from VERSION file
+        id: current-release
+        run: echo "::set-output name=result::$(cat VERSION)"
+      - name: read latest version from the changelog
+        id: next-release
+        uses: mattwynne/changelog-action@v1.2
+        with:
+          args: latest
+  
+  create-release-pr:
+    runs-on: ubuntu-latest
+    name: Create Release PR
+    needs: versions
+    if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
+    env:
+      next_version: ${{ needs.versions.outputs.next-version }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Update VERSION
+        run: echo $next_version > VERSION
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Release ${{ env.next_version }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          base: release
+          branch: release-${{ env.next_version }}
+          title: "Release ${{ env.next_version }}"
+          body: |
+            Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
+
+            See diff for details.
+          team-reviewers: "@cucumber/build"
