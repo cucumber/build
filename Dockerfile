@@ -182,7 +182,10 @@ RUN apt-get update \
 # Download and install chromium for puppetteer
 COPY scripts/download-chrome.sh .
 RUN bash ./download-chrome.sh
+<<<<<<< HEAD
 RUN rm ./download-chrome.sh
+=======
+>>>>>>> release
 # Puppetteer seems to need the binary to be called chromium-browser
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 
