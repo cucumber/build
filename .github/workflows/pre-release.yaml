@@ -42,9 +42,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: main
-      - name: Update VERSION
-        run: echo $next_version > VERSION
+          ref: release
+      - run: git checkout -b pre-release/${{ env.next_version }}
+      - run: git merge --squash main
+      - run: echo $next_version > VERSION
+      - run: git add VERSION
+      - run: git commit -S -m "Release v${{ env.next_version }}"
+      - run: git push --set-upstream origin release-$VERSION
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
