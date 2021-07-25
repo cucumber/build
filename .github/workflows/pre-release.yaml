@@ -26,6 +26,7 @@ jobs:
       - name: read the current release version from git tags
         id: current-release
         run: |
+          git fetch --tags
           version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
           version=${version_tag/v/}
           echo "::set-output name=result::$version"
