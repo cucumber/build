@@ -42,10 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: main
-      - uses: actions/checkout@v2
-        with:
           ref: release
+      - run: git fetch origin main
+      - run: git checkout main
+      - run: git checkout release
       - run: git checkout -b pre-release/${{ env.next_version }}
       - run: git merge --squash origin/main
       - run: echo $next_version > VERSION
