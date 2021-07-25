@@ -23,9 +23,12 @@ jobs:
       next-version: ${{ steps.next-release.outputs.output }}
     steps:
       - uses: actions/checkout@v2
-      - name: read the current version from VERSION file
+      - name: read the current release version from git tags
         id: current-release
-        run: echo "::set-output name=result::$(cat VERSION)"
+        run: |
+          version_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          version=${version_tag/v/}
+          echo "::set-output name=result::$version"
       - name: read latest version from the changelog
         id: next-release
         uses: mattwynne/changelog-action@v1.2
@@ -46,16 +49,13 @@ jobs:
       - run: git fetch origin main
       - run: git checkout main
       - run: git checkout release
-      - run: git merge --squash origin/main
-      - run: echo $next_version > VERSION
-      - run: git add VERSION
+      - run: git rebase main
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           base: release
           branch: pre-release/${{ env.next_version }}
           title: "Release v${{ env.next_version }}"
-          commit-message: "Release v${{ env.next_version }}"
           body: |
             Automated changed by [pre-release.yaml](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) GitHub action.
 

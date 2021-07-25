@@ -12,18 +12,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Read version number
-        run: echo "version"=$(cat VERSION) > $GITHUB_ENV
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: version
+      - name: Read version to release from the changelog
+        id: next-release
+        uses: mattwynne/changelog-action@v1.2
         with:
-          text: ${{ env.version }}
-          regex: '\d+\.\d+\.\d+'
-      - name: Check valid version
-        if: steps.version.outputs.match == ''
-        run: |
-          echo "Invalid version: ${{ env.version }}"
-          exit 1
+          args: latest
+      - name: Set version environment variable
+        run: echo "version"=${{ steps.next-release.outputs.output }} > $GITHUB_ENV
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         with:
