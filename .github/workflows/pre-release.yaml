@@ -53,7 +53,7 @@ jobs:
       - run: git config --global user.email "<${{ github.actor }}@users.noreply.github.com>"
       - run: git config --global user.name "${{ github.actor }}"
       - run: git commit -S -m "Release v${{ env.next_version }}"
-      - run: git push --set-upstream origin release-$VERSION
+      - run: git push --set-upstream origin pre-release-$VERSION
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
