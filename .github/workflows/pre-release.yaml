@@ -42,6 +42,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          ref: main
+      - uses: actions/checkout@v2
+        with:
           ref: release
       - run: git checkout -b pre-release/${{ env.next_version }}
       - run: git merge --squash main
