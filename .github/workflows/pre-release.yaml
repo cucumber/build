@@ -45,11 +45,6 @@ jobs:
           ref: main
       - name: Update VERSION
         run: echo $next_version > VERSION
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Release ${{ env.next_version }}
-      - run: git checkout release
-      - run: git merge --squash main
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
