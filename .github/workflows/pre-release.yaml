@@ -47,7 +47,7 @@ jobs:
         with:
           ref: release
       - run: git checkout -b pre-release/${{ env.next_version }}
-      - run: git merge --squash main
+      - run: git merge --squash origin/main
       - run: echo $next_version > VERSION
       - run: git add VERSION
       - run: git commit -S -m "Release v${{ env.next_version }}"
