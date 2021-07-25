@@ -48,7 +48,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          base: release/${{ env.next_version }}
+          base: release
           branch: pre-release/${{ env.next_version }}
           title: "Release ${{ env.next_version }}"
           commit-message: "Release ${{ env.next_version }}"
