@@ -50,6 +50,8 @@ jobs:
       - run: git merge --squash origin/main
       - run: echo $next_version > VERSION
       - run: git add VERSION
+      - run: git config --global user.email "<${{ github.actor }}@users.noreply.github.com>"
+      - run: git config --global user.name "${{ github.actor }}"
       - run: git commit -S -m "Release v${{ env.next_version }}"
       - run: git push --set-upstream origin release-$VERSION
       - name: Create Pull Request
