@@ -38,7 +38,7 @@ jobs:
   
   create-release-pr:
     runs-on: ubuntu-latest
-    name: Create Release PR
+    name: Create / Update Release PR
     needs: versions
     if: needs.versions.outputs.released-version != needs.versions.outputs.next-version
     env:
