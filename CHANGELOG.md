@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Update Perl dependencies ([#38](https://github.com/cucumber/build/pull/38))
+- Rename chrome to chromium ([#35](https://github.com/cucumber/build/pull/35))
 
 ## [0.6.0] - 2021-07-28
 ### Added
