@@ -31,33 +31,6 @@ The Docker image is published to a public dockerhub repository via an [automated
 
 To make a release, you make a pull request to the `release` branch, and wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge it.
 
-Here's the steps in detail:
+We have an automated [`pre-release`](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) workflow which will create a release pull request as soon as you update the [`CHANGELOG.md`](https://github.com/cucumber/build/blob/main/CHANGELOG.md) file, adding a new version heading. Choose a version number using [semantic versioning](https://semver.org/).
 
-1. Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all commits to the `release` branch must be signed.
-
-1. Choose a version number, using [semantic versioning](https://semver.org/).
-   ```
-   echo "What's the version number you want to release?"
-   read VERSION
-   ```
-1. Update the version number in the [release.yaml](./.github/workflows/release.yaml) workflow.
-1. Update the [CHANGELOG.md](./CHANGELOG.md) file, adding your changes in a section beneath the new release number.
-1. Commit your changes
-   ```
-   git checkout main
-   git add . && git commit -S -m "Prepare to release v$VERSION"
-   git push
-   ```
-1. Create a branch for the release, squashing the commits into a single commit, signed by you: (this is in case any of the commits you're releasing were not signed).
-   ```
-   git checkout release
-   git checkout -b release-$VERSION
-   git merge --squash main
-   git commit -S -m "Release v$VERSION"
-   git push --set-upstream origin release-$VERSION
-   ```
-1. Submit a pull request to the protected `release` branch. You [need to install](https://github.com/cli/cli#installation) the GitHub CLI tool, `gh`.
-   ```
-   gh pr create --title "📦 Release v$VERSION" --body "See diff for details." --base release --head release-$VERSION
-   ```
-1. Wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge your change which will trigger an automatic release.
+Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all commits to the `main` and `release` branches must be signed.
