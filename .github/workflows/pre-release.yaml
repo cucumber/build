@@ -31,10 +31,16 @@ jobs:
           version=${version_tag/v/}
           echo "::set-output name=result::$version"
       - name: read latest version from the changelog
-        id: next-release
+        id: next-release-from-changelog
         uses: mattwynne/changelog-action@v1.2
         with:
           args: latest
+      - name: Parse version number from changelog release name
+        id: next-release
+        run: |
+          version_heading=${{ teps.next-release-from-changelog.outputs.output }}
+          version=${version_heading/v}
+          echo "::set-output name=result::${version}"
   
   create-release-pr:
     runs-on: ubuntu-latest
