@@ -51,7 +51,7 @@ jobs:
       - run: git fetch origin main
       - run: git checkout main
       - run: git checkout release/${{ env.released_version }}
-      - run: git rebase main
+      - run: git rebase -X ours main
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
