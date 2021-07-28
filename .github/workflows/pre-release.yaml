@@ -20,7 +20,7 @@ jobs:
     name: Get version numbers
     outputs:
       released-version: ${{ steps.current-release.outputs.result }}
-      next-version: ${{ steps.next-release.outputs.output }}
+      next-version: ${{ steps.next-release.outputs.result }}
     steps:
       - uses: actions/checkout@v2
       - name: read the current release version from git tags
@@ -40,7 +40,7 @@ jobs:
         run: |
           version_heading=${{ steps.next-release-from-changelog.outputs.output }}
           version=${version_heading/v}
-          echo "::set-output name=result::${version}"
+          echo "::set-output name=result::$version"
   
   create-release-pr:
     runs-on: ubuntu-latest
