@@ -180,9 +180,9 @@ RUN apt-get update \
     libsqlite3-dev
 
 # Download and install chromium for puppetteer
-COPY scripts/download-chromium.sh .
-RUN bash ./download-chromium.sh
-RUN rm ./download-chromium.sh
+COPY scripts/install-chromium.sh .
+RUN bash ./install-chromium.sh
+RUN rm ./install-chromium.sh
 # Puppetteer seems to need the binary to be called chromium-browser
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 
