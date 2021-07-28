@@ -38,7 +38,7 @@ jobs:
       - name: Parse version number from changelog release name
         id: next-release
         run: |
-          version_heading=${{ teps.next-release-from-changelog.outputs.output }}
+          version_heading=${{ steps.next-release-from-changelog.outputs.output }}
           version=${version_heading/v}
           echo "::set-output name=result::${version}"
   
