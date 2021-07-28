@@ -41,6 +41,10 @@ jobs:
           version_heading=${{ steps.next-release-from-changelog.outputs.output }}
           version=${version_heading/v}
           echo "::set-output name=result::$version"
+      - name: Report version numbers detected
+        run: |
+          echo "Released: ${{ steps.current-release.outputs.result }}"
+          echo "Next:     ${{ steps.next-release.outputs.result }}"
   
   create-release-pr:
     runs-on: ubuntu-latest
