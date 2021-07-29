@@ -56,6 +56,8 @@ jobs:
       released_version: ${{ needs.versions.outputs.released-version }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
