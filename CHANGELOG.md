@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [v0.7.0] - 2021-07-29
 ### Changed
 - Update Perl dependencies ([#38](https://github.com/cucumber/build/pull/38))
 - Rename chrome to chromium ([#35](https://github.com/cucumber/build/pull/35))
@@ -49,7 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial version
 
-[Unreleased]: https://github.com/cucumber/build/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/cucumber/build/compare/v0.7.0...HEAD
+[v0.7.0]: https://github.com/cucumber/build/compare/v0.6.0...v0.7.0
 [v0.6.0]: https://github.com/cucumber/build/compare/v0.5.2...v0.6.0
 [v0.5.2]: https://github.com/cucumber/build/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/cucumber/build/compare/v0.5.0...v0.5.1
