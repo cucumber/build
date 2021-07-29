@@ -59,7 +59,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: git checkout -b pre-release/v${{ env.next_version }}
-      - run: git push --force origin git push --force --set-upstream origin pre-release/v${{ env.next_version }}
+      - run: git push --force --set-upstream origin pre-release/v${{ env.next_version }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
