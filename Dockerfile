@@ -101,7 +101,7 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
 RUN curl -sSL https://cpanmin.us/ -o /usr/local/bin/cpanm \
     && cd /usr/local/bin/ && echo "09c682a9c6d7c47967bba91909378072921c12d0  cpanm" | sha1sum -c --quiet - && cd /app \
     && chmod +x /usr/local/bin/cpanm \
-    && cpanm --notest Carton \
+    && cpanm --notest Dist::Zilla Test2::V0 \
     && rm -rf /root/.cpanm
 
 # Install hub
@@ -180,10 +180,9 @@ RUN apt-get update \
     libsqlite3-dev
 
 # Download and install chromium for puppetteer
-COPY scripts/download-chrome.sh .
-RUN bash ./download-chrome.sh
-RUN rm ./download-chrome.sh
-
+COPY scripts/install-chromium.sh .
+RUN bash ./install-chromium.sh
+RUN rm ./install-chromium.sh
 # Puppetteer seems to need the binary to be called chromium-browser
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 

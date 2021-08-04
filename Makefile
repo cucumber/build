@@ -3,7 +3,11 @@ DEFAULT_PLATFORM = $(shell [ $$(arch) = "arm64" ] && echo "linux/arm64" || echo 
 PLATFORMS ?= ${DEFAULT_PLATFORM}
 
 default:
-	docker buildx build --platform=${PLATFORMS} --tag ${NAME}:latest .
+	docker buildx build \
+		--cache-to="type=local,dest=/tmp/.buildx-cache-new" \
+		--cache-from="type=local,src=/tmp/.buildx-cache" \
+		--platform=${PLATFORMS} \
+		--tag ${NAME}:latest .
 .PHONY: default
 
 local:
