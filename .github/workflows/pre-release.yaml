@@ -32,7 +32,7 @@ jobs:
           echo "::set-output name=result::$version"
       - name: read latest version from the changelog
         id: next-release-from-changelog
-        uses: mattwynne/changelog-action@v1.2
+        uses: mattwynne/changelog-action@v1.3
         with:
           args: latest
       - name: Parse version number from changelog release name
