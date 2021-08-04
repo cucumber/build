@@ -44,7 +44,7 @@ jobs:
           tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
       - name: Read release notes from CHANGELOG
         id: release-notes
-        uses: mattwynne/changelog-action@v1.3
+        uses: cucumber-actions/changelog-action@v1.3
         with:
           args: show ${{ env.version }}
       - name: Create release
