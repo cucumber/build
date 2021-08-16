@@ -203,6 +203,12 @@ RUN apt-get update && apt-get install wget
 COPY scripts/install-dart.sh .
 RUN bash ./install-dart.sh
 RUN rm ./install-dart.sh
+ENV PATH="${PATH}:/usr/lib/dart-sdk/bin"
+
+# Run some tests on the image
+COPY scripts/acceptance-test-for-image.sh .
+RUN bash ./acceptance-test-for-image.sh
+RUN rm ./acceptance-test-for-image.sh
 
 USER $USER
 

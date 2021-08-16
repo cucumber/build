@@ -32,8 +32,5 @@ unzip -d /usr/lib $tzip > /dev/null
 chown -R cukebot /usr/lib/dart-sdk
 chmod -R +rx /usr/lib/dart-sdk
 
-# Adding dart to path
-export PATH="$PATH:/usr/lib/dart-sdk/bin"
-
 # Removing tmp files
 rm -r "$tdir"
