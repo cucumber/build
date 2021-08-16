@@ -49,7 +49,7 @@ jobs:
           args: show ${{ env.version }}
       - name: Create release
         run: |
-          cat >${{ runner.temp }}/notes <<EOT
+          cat >${{ runner.temp }}/notes <<"EOT"
           ${{ steps.release-notes.outputs.result }}
           EOT
           gh release create \
