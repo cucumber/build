@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Read version to release from the changelog
         id: next-release
-        uses: cucumber-actions/changelog-action@v1.3
+        uses: cucumber/action-changelog@v1.3
         with:
           args: latest
       - name: Set version environment variable
@@ -44,7 +44,7 @@ jobs:
           tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
       - name: Read release notes from CHANGELOG
         id: release-notes
-        uses: cucumber-actions/changelog-action@v1.3
+        uses: cucumber/action-changelog@v1.3
         with:
           args: show ${{ env.version }}
       - name: Create release
