@@ -121,13 +121,9 @@ RUN git clone \
     && rm -r hub
 
 # Install splitsh/lite
-RUN go get -d github.com/libgit2/git2go/v28 \
-    && cd $(go env GOPATH)/src/github.com/libgit2/git2go \
-    && git checkout next \
-    && git submodule update --init \
-    && make install \
-    && go get github.com/splitsh/lite \
-    && go build -o /usr/local/bin/splitsh-lite github.com/splitsh/lite
+RUN curl -sSL https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz -o lite_linux_amd64.tar.gz \
+    && tar -zxpf lite_linux_amd64.tar.gz --directory /usr/local/bin \
+    && rm lite_linux_amd64.tar.gz
 
 # Install .NET Core
 # https://github.com/dotnet/dotnet-docker/blob/5c25dd2ed863dfd73edb1a6381dd9635734d0e5f/2.2/sdk/bionic/amd64/Dockerfile
