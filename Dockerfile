@@ -20,7 +20,8 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install --assume-yes  \
     software-properties-common \
-    && add-apt-repository universe
+    && add-apt-repository universe \
+    && add-apt-repository ppa:longsleep/golang-backports
 
 RUN apt-get update \
     && apt-get install --assume-yes  \
@@ -188,7 +189,7 @@ RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
-    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \ 
+    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \
     && dpkg -i erlang.deb \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -214,7 +215,7 @@ USER $USER
 ## As a user install node and npm via node version-manager
 WORKDIR /home/$USER
 RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install-nvm.sh \
-    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \ 
+    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \
     && cat install-nvm.sh | bash \
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
