@@ -36,6 +36,8 @@ RUN apt-get update \
     g++ \
     jq \
     libc-dev \
+    libgit2-28 \
+    libgit2-dev \
     libssl-dev \
     libxml2-dev \
     libxslt-dev \
@@ -119,7 +121,7 @@ RUN git clone \
     && rm -r hub
 
 # Install splitsh/lite
-RUN go get -d github.com/libgit2/git2go \
+RUN go get -d github.com/libgit2/git2go/v28 \
     && cd $(go env GOPATH)/src/github.com/libgit2/git2go \
     && git checkout next \
     && git submodule update --init \
