@@ -18,8 +18,7 @@ local: /tmp/.buildx-cache-new/index.json .local-image
 
 docker-run: local
 	docker run \
-	  --volume "${HOME}/.m2/repository":/home/cukebot/.m2/repository \
-	  --user 1000 \
+		--volume "${HOME}/.m2/repository":/root/.m2/repository \
 	  --rm \
 	  -it ${NAME} \
 	  $(1)

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Use root user instead of cukebot in docker container ([#62](https://github.com/cucumber/build/pull/62))
 
 ## [0.9.0] - 2021-12-16
 ### Changed
