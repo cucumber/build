@@ -20,7 +20,8 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install --assume-yes  \
     software-properties-common \
-    && add-apt-repository universe
+    && add-apt-repository universe \
+    && add-apt-repository ppa:longsleep/golang-backports
 
 RUN apt-get update \
     && apt-get install --assume-yes  \
@@ -35,6 +36,8 @@ RUN apt-get update \
     g++ \
     jq \
     libc-dev \
+    libgit2-28 \
+    libgit2-dev \
     libssl-dev \
     libxml2-dev \
     libxslt-dev \
@@ -118,13 +121,9 @@ RUN git clone \
     && rm -r hub
 
 # Install splitsh/lite
-RUN go get -d github.com/libgit2/git2go \
-    && cd $(go env GOPATH)/src/github.com/libgit2/git2go \
-    && git checkout next \
-    && git submodule update --init \
-    && make install \
-    && go get github.com/splitsh/lite \
-    && go build -o /usr/local/bin/splitsh-lite github.com/splitsh/lite
+RUN curl -sSL https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz -o lite_linux_amd64.tar.gz \
+    && tar -zxpf lite_linux_amd64.tar.gz --directory /usr/local/bin \
+    && rm lite_linux_amd64.tar.gz
 
 # Install .NET Core
 # https://github.com/dotnet/dotnet-docker/blob/5c25dd2ed863dfd73edb1a6381dd9635734d0e5f/2.2/sdk/bionic/amd64/Dockerfile
@@ -143,11 +142,10 @@ RUN apt-get update \
 ## Install .NET Core SDK
 ENV DOTNET_SDK_VERSION 5.0
 
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh \
-    && echo "25b457ce8170a34f74649632660c40a5cfd355a1  dotnet-install.sh" | sha1sum -c --quiet - \ 
-    && cat dotnet-install.sh | bash -s -- -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-    && rm dotnet-install.sh
+COPY scripts/install-dotnet.sh .
+RUN ./install-dotnet.sh -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+RUN rm install-dotnet.sh
 
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet --list-sdks
@@ -189,7 +187,7 @@ RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 # Install Elixir
 ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
-    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \ 
+    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \
     && dpkg -i erlang.deb \
     && apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -215,7 +213,7 @@ USER $USER
 ## As a user install node and npm via node version-manager
 WORKDIR /home/$USER
 RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install-nvm.sh \
-    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \ 
+    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \
     && cat install-nvm.sh | bash \
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
