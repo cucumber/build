@@ -187,6 +187,7 @@ ENV PATH="${PATH}:/usr/lib/dart-sdk/bin"
 
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
+RUN npm install -g npm
 
 # # Run some tests on the image
 COPY scripts/acceptance-test-for-image.sh .
