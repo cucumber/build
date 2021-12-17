@@ -203,10 +203,7 @@ RUN bash ./install-dart.sh
 RUN rm ./install-dart.sh
 ENV PATH="${PATH}:/usr/lib/dart-sdk/bin"
 
-# Run some tests on the image
-COPY scripts/acceptance-test-for-image.sh .
-RUN bash ./acceptance-test-for-image.sh
-RUN rm ./acceptance-test-for-image.sh
+RUN chown $USER /app
 
 USER $USER
 
@@ -222,5 +219,10 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o
     && nvm install-latest-npm \
     && rm install-nvm.sh
 WORKDIR /app
+
+# # Run some tests on the image
+COPY scripts/acceptance-test-for-image.sh .
+RUN bash ./acceptance-test-for-image.sh
+RUN rm ./acceptance-test-for-image.sh
 
 CMD ["/bin/bash"]
