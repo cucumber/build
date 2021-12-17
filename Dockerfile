@@ -65,11 +65,11 @@ ARG TARGETARCH
 
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-$TARGETARCH
-COPY toolchains.xml ~/.m2/toolchains.xml
-COPY settings.xml ~/.m2/settings.xml
+COPY toolchains.xml /root/.m2/toolchains.xml
+COPY settings.xml /root/.m2/settings.xml
 
 # Configure Ruby
-RUN echo "gem: --no-document" > ~/.gemrc \
+RUN echo "gem: --no-document" > /root/.gemrc \
     && gem install bundler io-console nokogiri
 RUN bundle config --global silence_root_warning 1
 
@@ -150,7 +150,7 @@ RUN curl -sSL https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb -o sbt.de
     && dpkg -i sbt.deb \
     && rm -f sbt.deb
 # Configure sbt
-COPY sonatype.sbt ~/.sbt/1.0/sonatype.sbt
+COPY sonatype.sbt /root/.sbt/1.0/sonatype.sbt
 
 # Install sqlite3 - Required for cucumber-rails
 RUN apt-get update \
@@ -167,7 +167,7 @@ RUN rm ./install-chromium.sh
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 
 # Install Elixir
-ENV MIX_HOME=~/.mix
+ENV MIX_HOME=/root/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
     && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \
     && dpkg -i erlang.deb \
