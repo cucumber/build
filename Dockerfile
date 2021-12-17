@@ -71,6 +71,7 @@ COPY settings.xml ~/.m2/settings.xml
 # Configure Ruby
 RUN echo "gem: --no-document" > ~/.gemrc \
     && gem install bundler io-console nokogiri
+RUN bundle config --global silence_root_warning 1
 
 # Install and configure pip2, twine and behave
 RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
