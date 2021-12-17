@@ -29,8 +29,13 @@ Now try running the build with multiple platforms, e.g.
 
 The Docker image is published to a public dockerhub repository via an [automated Continuous Deployment workflow](./.github/workflows/release.yaml) running off protected release branches.
 
-To make a release, you make a pull request to a `release/<version>` branch, and wait for a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team to merge it. Once the PR is merged into the release branch, it will be automatically released.
+To make a release, you'll need to be a member of the [@cucumber/build](https://github.com/orgs/cucumber/teams/build) team.
 
-We have an automated [`pre-release`](https://github.com/cucumber/build/blob/main/.github/workflows/pre-release.yaml) workflow which will create a release pull request as soon as you update the [`CHANGELOG.md`](https://github.com/cucumber/build/blob/main/CHANGELOG.md) file, adding a new version heading. Choose a version number using [semantic versioning](https://semver.org/).
+    export next_release=`changelog latest`
+    git push origin main:release/v$next_release
+
+This assumes you have updated the CHANGELOG.md with the next release, and have the [changelog] tool installed.
 
 Make sure you have [set up a GPG key](https://docs.github.com/en/github/authenticating-to-github/signing-commits) - all commits to the `main` and `release` branches must be signed.
+
+[changelog]: https://github.com/cucumber/changelog
