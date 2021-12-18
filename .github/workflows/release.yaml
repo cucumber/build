@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Publish docker image
     environment: Release
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write
 
@@ -21,8 +19,6 @@ jobs:
         uses: cucumber/action-changelog@v1.3
         with:
           args: latest
-      - name: Set version environment variable
-        run: echo "version"=${{ steps.next-release.outputs.result }} > $GITHUB_ENV
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         with:
@@ -40,20 +36,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           labels: |
-            version=${{ env.version }}
+            version=${{ steps.next-release.outputs.result }}
           tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
-      - name: Read release notes from CHANGELOG
-        id: release-notes
-        uses: cucumber/action-changelog@v1.3
+      - uses: cucumber/actions-create-github-release@v1.1.0
         with:
-          args: show ${{ env.version }}
-      - name: Create release
-        run: |
-          cat >${{ runner.temp }}/notes << "EOT"
-          ${{ steps.release-notes.outputs.result }}
-          EOT
-          gh release create \
-            --notes-file ${{ runner.temp }}/notes \
-            --title v${{ env.version }} \
-            --target pre-release/v${{ env.version }} \
-            v${{ env.version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
