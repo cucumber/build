@@ -185,9 +185,18 @@ RUN bash ./install-dart.sh
 RUN rm ./install-dart.sh
 ENV PATH="${PATH}:/usr/lib/dart-sdk/bin"
 
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
-RUN npm install -g npm
+# Install Node using nvm
+RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh -o install-nvm.sh \
+    && echo "a3ec80a2734b9bfa72227aae829b362bb717fc87 install-nvm.sh" | sha1sum -c --quiet - \
+    && chmod +x install-nvm.sh \
+    && bash install-nvm.sh \
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
+    && nvm install 14 \
+    && nvm use 14 \
+    && nvm alias default 14 \
+    && npm install -g npm
 
 # # Run some tests on the image
 COPY scripts/acceptance-test-for-image.sh .
