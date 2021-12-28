@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use mvn to install and manage nodejs ([#63](https://github.com/cucumber/build/pull/63))
+
 ## [0.10.0] - 2021-12-17
 ### Changed
 - Use root user instead of cukebot in docker container ([#62](https://github.com/cucumber/build/pull/62))
