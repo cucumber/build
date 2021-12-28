@@ -35,7 +35,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           labels: |
             version=${{ steps.next-release.outputs.changelog-latest-version }}
-          tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
+          tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ steps.next-release.outputs.changelog-latest-version }}
       - uses: cucumber/action-create-github-release@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
