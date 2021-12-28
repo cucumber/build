@@ -38,6 +38,6 @@ jobs:
           labels: |
             version=${{ steps.next-release.outputs.result }}
           tags: cucumber/cucumber-build:latest,cucumber/cucumber-build:${{ env.version }}
-      - uses: cucumber/actions-create-github-release@v1.1.0
+      - uses: cucumber/action-create-github-release@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
