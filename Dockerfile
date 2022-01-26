@@ -122,7 +122,8 @@ RUN git clone \
 
 # Install splitsh/lite
 RUN curl -sSL https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz -o lite_linux_amd64.tar.gz \
-    && tar -zxpf lite_linux_amd64.tar.gz --directory /usr/local/bin \
+    && tar -zxpf lite_linux_amd64.tar.gz \
+    && mv splitsh-lite /usr/local/bin \
     && rm lite_linux_amd64.tar.gz
 
 # Install .NET Core
@@ -230,11 +231,12 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o
     && nvm install-latest-npm \
     && rm install-nvm.sh
 
-WORKDIR /app
-
 # Run some tests on the image
 COPY scripts/acceptance-test-for-image.sh .
 RUN bash ./acceptance-test-for-image.sh
 RUN rm ./acceptance-test-for-image.sh
+
+WORKDIR /app
+
 
 CMD ["/bin/bash"]
