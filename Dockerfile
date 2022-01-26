@@ -216,11 +216,6 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh -o
     && nvm alias default 14 \
     && npm install -g npm
 
-# Run some tests on the image
-COPY scripts/acceptance-test-for-image.sh .
-RUN bash ./acceptance-test-for-image.sh
-RUN rm ./acceptance-test-for-image.sh
-
 USER $USER
 
 ## As a user install node and npm via node version-manager
@@ -234,6 +229,12 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o
     && nvm install 14.17.3 \
     && nvm install-latest-npm \
     && rm install-nvm.sh
+
 WORKDIR /app
+
+# Run some tests on the image
+COPY scripts/acceptance-test-for-image.sh .
+RUN bash ./acceptance-test-for-image.sh
+RUN rm ./acceptance-test-for-image.sh
 
 CMD ["/bin/bash"]
