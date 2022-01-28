@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### [0.12.0] - 2022-01-28
+## [0.12.0] - 2022-01-28
 ### Changed
 - Use cukebot user again ([#64](https://github.com/cucumber/build/pull/64))
 - Add php to the image ([#65](https://github.com/cucumber/build/pull/65))
