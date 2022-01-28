@@ -25,10 +25,11 @@ if ! [ $? -eq 0 ]; then
     exit 1
 fi
 
-# Unzip to lib location
+# Unzipping to lib location
 unzip -d /usr/lib $tzip > /dev/null
 
-# Enable write and execution for the dark-sdk folder
+# Enabling write and execution for the dark-sdk folder
+chown -R cukebot /usr/lib/dart-sdk
 chmod -R +rx /usr/lib/dart-sdk
 
 # Removing tmp files

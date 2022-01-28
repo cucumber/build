@@ -61,17 +61,35 @@ RUN apt-get update \
     upx \
     xmlstarlet
 
+# Create a cukebot user. Some tools (Bundler, npm publish) don't work properly
+# when run as root
+ENV USER=cukebot
+ENV UID=1000
+ENV GID=2000
+
+RUN addgroup --gid "$GID" "$USER" \
+    && adduser \
+    --disabled-password \
+    --gecos "" \
+    --ingroup "$USER" \
+    --uid "$UID" \
+    --shell /bin/bash \
+    "$USER"
+
 ARG TARGETARCH
 
 # Configure Maven and Java
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-$TARGETARCH
-COPY toolchains.xml /root/.m2/toolchains.xml
-COPY settings.xml /root/.m2/settings.xml
+COPY --chown=$USER toolchains.xml /home/$USER/.m2/toolchains.xml
+COPY --chown=$USER settings.xml /home/$USER/.m2/settings.xml
 
 # Configure Ruby
-RUN echo "gem: --no-document" > /root/.gemrc \
-    && gem install bundler io-console nokogiri
-RUN bundle config --global silence_root_warning 1
+RUN echo "gem: --no-document" > ~/.gemrc \
+    && gem install bundler io-console nokogiri \
+    && chown -R $USER:$USER /usr/lib/ruby  \
+    && chown -R $USER:$USER /usr/local/bin \
+    && chown -R $USER:$USER /var/lib \
+    && chown -R $USER:$USER /usr/bin
 
 # Install and configure pip2, twine and behave
 RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
@@ -104,7 +122,8 @@ RUN git clone \
 
 # Install splitsh/lite
 RUN curl -sSL https://github.com/splitsh/lite/releases/download/v1.0.1/lite_linux_amd64.tar.gz -o lite_linux_amd64.tar.gz \
-    && tar -zxpf lite_linux_amd64.tar.gz --directory /usr/local/bin \
+    && tar -zxpf lite_linux_amd64.tar.gz \
+    && mv splitsh-lite /usr/local/bin \
     && rm lite_linux_amd64.tar.gz
 
 # Install .NET Core
@@ -150,7 +169,7 @@ RUN curl -sSL https://repo.scala-sbt.org/scalasbt/debian/sbt-1.5.1.deb -o sbt.de
     && dpkg -i sbt.deb \
     && rm -f sbt.deb
 # Configure sbt
-COPY sonatype.sbt /root/.sbt/1.0/sonatype.sbt
+COPY --chown=$USER sonatype.sbt /home/$USER/.sbt/1.0/sonatype.sbt
 
 # Install sqlite3 - Required for cucumber-rails
 RUN apt-get update \
@@ -167,7 +186,7 @@ RUN rm ./install-chromium.sh
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
 
 # Install Elixir
-ENV MIX_HOME=/root/.mix
+ENV MIX_HOME=/home/cukebot/.mix
 RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
     && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \
     && dpkg -i erlang.deb \
@@ -198,9 +217,26 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh -o
     && nvm alias default 14 \
     && npm install -g npm
 
-# # Run some tests on the image
+USER $USER
+
+## As a user install node and npm via node version-manager
+WORKDIR /home/$USER
+RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install-nvm.sh \
+    && echo "5a59afa6936f42ceb8e239a6cb191f03cefaa741  install-nvm.sh" | sha1sum -c --quiet - \
+    && cat install-nvm.sh | bash \
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
+    && nvm install 14.17.3 \
+    && nvm install-latest-npm \
+    && rm install-nvm.sh
+
+# Run some tests on the image
 COPY scripts/acceptance-test-for-image.sh .
 RUN bash ./acceptance-test-for-image.sh
 RUN rm ./acceptance-test-for-image.sh
+
+WORKDIR /app
+
 
 CMD ["/bin/bash"]
