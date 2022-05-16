@@ -101,9 +101,8 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
     && rm get-pip.py
 
 # Configure Perl
-RUN curl -sSL https://cpanmin.us/ -o /usr/local/bin/cpanm \
-    && cd /usr/local/bin/ && echo "f88eab9467b64690368862dc803446781c5d6a52  cpanm" | sha1sum -c --quiet - && cd /app \
-    && chmod +x /usr/local/bin/cpanm \
+RUN apt-get update \
+    && apt-get install --assume-yes cpanminus \
     && cpanm --notest Dist::Zilla Test2::V0 \
     && rm -rf /root/.cpanm
 
@@ -227,12 +226,9 @@ RUN apt-get install --assume-yes apt-transport-https software-properties-common 
         php8.1-common \
         php8.1-curl \
         php8.1-mbstring\
-        php8.1-xml \
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && mv composer.phar /usr/local/bin/composer
+        php8.1-xml
+
+COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/composer
 
 USER $USER
 
