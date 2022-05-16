@@ -101,9 +101,8 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
     && rm get-pip.py
 
 # Configure Perl
-RUN curl -sSL https://cpanmin.us/ -o /usr/local/bin/cpanm \
-    && cd /usr/local/bin/ && echo "f88eab9467b64690368862dc803446781c5d6a52  cpanm" | sha1sum -c --quiet - && cd /app \
-    && chmod +x /usr/local/bin/cpanm \
+RUN apt-get update \
+    && apt-get install --assume-yes cpanminus \
     && cpanm --notest Dist::Zilla Test2::V0 \
     && rm -rf /root/.cpanm
 
