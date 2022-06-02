@@ -41,8 +41,8 @@ jobs:
           labels: |
             version=${{ steps.next-release.outputs.changelog-latest-version }}
           tags: |
-            cucumber/cucumber-build:latest,cucumber/cucumber-build
-            ${{ steps.next-release.outputs.changelog-latest-version }}
+            cucumber/cucumber-build:latest
+            cucumber/cucumber-build:${{ steps.next-release.outputs.changelog-latest-version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
