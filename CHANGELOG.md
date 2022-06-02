@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add `cpan-upload` for perl releases ([#76](https://github.com/cucumber/build/pull/76))
+
+### Changed
+- Use `apt` to download `cpanm` and `composer` ([#75](https://github.com/cucumber/build/pull/75))
+
 ## [0.12.0] - 2022-01-28
 ### Changed
 - Use cukebot user again ([#64](https://github.com/cucumber/build/pull/64))
