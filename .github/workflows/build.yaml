@@ -5,10 +5,7 @@ on:
     branches:
       - main
       - renovate/**
-
   pull_request:
-  schedule:
-    - cron: "0 0 * * *" # midnight daily
 
 jobs:
   docker-build:
