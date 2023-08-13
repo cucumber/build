@@ -29,6 +29,8 @@ RUN apt-get update \
     cmake \
     curl \
     diffutils \
+    elixir \
+    erlang \
     golang-go \
     git \
     gnupg \
@@ -183,18 +185,6 @@ RUN bash ./install-chromium.sh
 RUN rm ./install-chromium.sh
 # Puppetteer seems to need the binary to be called chromium-browser
 RUN ln -s /usr/bin/chromium /usr/bin/chromium-browser
-
-# Install Elixir
-ENV MIX_HOME=/home/cukebot/.mix
-RUN curl -sSL https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb -o erlang.deb \
-    && echo "1968ec2ae81a5e1f56d2f173144926ec90a5e7c7  erlang.deb" | sha1sum -c --quiet - \
-    && dpkg -i erlang.deb \
-    && apt-get update \
-    && apt-get install --assume-yes --no-install-recommends \
-    esl-erlang \
-    elixir \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -f erlang.deb
 
 # Install Dart
 RUN apt-get update && apt-get install wget
