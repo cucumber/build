@@ -135,7 +135,7 @@ RUN apt-get update \
     libc6 \
     libgcc1 \
     libgssapi-krb5-2 \
-    liblttng-ust0 \
+    liblttng-ust1 \
     libstdc++6 \
     zlib1g \
     && rm -rf /var/lib/apt/lists/*
