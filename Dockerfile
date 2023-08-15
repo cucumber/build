@@ -1,7 +1,7 @@
 # Builds a docker image used for building most projects in this repo. It's
 # used both by contributors and CI.
 #
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -38,7 +38,6 @@ RUN apt-get update \
     g++ \
     jq \
     libc-dev \
-    libgit2-28 \
     libgit2-dev \
     libssl-dev \
     libxml2-dev \
@@ -104,8 +103,12 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
 
 # Configure Perl
 RUN apt-get update \
-    && apt-get install --assume-yes cpanminus libcpan-uploader-perl \
-    && cpanm --notest Dist::Zilla Test2::V0 \
+    && apt-get install --assume-yes \
+          cpanminus \
+          libcpan-uploader-perl \
+          libdist-zilla-perl \
+          libtest2-suite-perl \
+    && cpanm --notest Dist::Zilla \
     && rm -rf /root/.cpanm
 
 # Install hub
@@ -136,13 +139,13 @@ RUN apt-get update \
     libc6 \
     libgcc1 \
     libgssapi-krb5-2 \
-    liblttng-ust0 \
+    liblttng-ust1 \
     libstdc++6 \
     zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 5.0
+ENV DOTNET_SDK_VERSION 6.0
 
 COPY scripts/install-dotnet.sh .
 RUN ./install-dotnet.sh -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
@@ -153,11 +156,8 @@ RUN rm install-dotnet.sh
 RUN dotnet --list-sdks
 
 # Install Berp
-RUN curl -sSL https://www.nuget.org/api/v2/package/Berp/1.1.1 -o berp.zip \
-    && echo "f558782cf8eb9143ab8e7f7e3ad1607f7fea512e  berp.zip" | sha1sum -c --quiet - \
-    && mkdir -p /var/lib/berp \
-    && unzip berp.zip -d /var/lib/berp/1.1.1 \
-    && rm berp.zip
+RUN dotnet tool install --global Berp --version 1.4.0 \
+    && echo 'export PATH="$PATH:/home/cukebot/.dotnet/tools"' >> ~/.bashrc
 
 # Install JS
 ## Install yarn without node
