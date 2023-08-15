@@ -103,8 +103,12 @@ RUN curl -sSL https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
 
 # Configure Perl
 RUN apt-get update \
-    && apt-get install --assume-yes cpanminus libcpan-uploader-perl \
-    && cpanm --notest Dist::Zilla Test2::V0 \
+    && apt-get install --assume-yes \
+          cpanminus \
+          libcpan-uploader-perl \
+          libdist-zilla-perl \
+          libtest2-suite-perl \
+    && cpanm --notest Dist::Zilla \
     && rm -rf /root/.cpanm
 
 # Install hub
