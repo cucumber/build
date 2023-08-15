@@ -145,7 +145,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 5.0
+ENV DOTNET_SDK_VERSION 6.0
 
 COPY scripts/install-dotnet.sh .
 RUN ./install-dotnet.sh -c $DOTNET_SDK_VERSION --install-dir /usr/share/dotnet \
@@ -156,11 +156,8 @@ RUN rm install-dotnet.sh
 RUN dotnet --list-sdks
 
 # Install Berp
-RUN curl -sSL https://www.nuget.org/api/v2/package/Berp/1.1.1 -o berp.zip \
-    && echo "f558782cf8eb9143ab8e7f7e3ad1607f7fea512e  berp.zip" | sha1sum -c --quiet - \
-    && mkdir -p /var/lib/berp \
-    && unzip berp.zip -d /var/lib/berp/1.1.1 \
-    && rm berp.zip
+RUN dotnet tool install --global Berp --version 1.4.0 \
+    && echo 'export PATH="$PATH:/home/cukebot/.dotnet/tools"' >> ~/.bashrc
 
 # Install JS
 ## Install yarn without node
