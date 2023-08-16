@@ -155,10 +155,6 @@ RUN rm install-dotnet.sh
 ## Trigger first run experience by running arbitrary cmd to populate local package cache
 RUN dotnet --list-sdks
 
-# Install Berp
-RUN dotnet tool install --global Berp --version 1.4.0 \
-    && echo 'export PATH="$PATH:/home/cukebot/.dotnet/tools"' >> ~/.bashrc
-
 # Install JS
 ## Install yarn without node
 RUN apt-get update \
@@ -233,6 +229,10 @@ RUN curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o
     && nvm install 14.17.3 \
     && nvm install-latest-npm \
     && rm install-nvm.sh
+
+# Install Berp (dotnet tool installs are user-global; not system global)
+RUN dotnet tool install --global Berp --version 1.4.0 \
+      && echo 'export PATH="$PATH:/home/cukebot/.dotnet/tools"' >> ~/.bashrc
 
 # Run some tests on the image
 COPY scripts/acceptance-test-for-image.sh .
