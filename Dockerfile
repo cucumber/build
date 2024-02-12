@@ -214,7 +214,7 @@ RUN apt-get install --assume-yes apt-transport-https software-properties-common 
         php8.1-mbstring\
         php8.1-xml
 
-COPY --from=composer:2.6 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/local/bin/composer
 
 USER $USER
 
