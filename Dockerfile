@@ -1,7 +1,7 @@
 # Builds a docker image used for building most projects in this repo. It's
 # used both by contributors and CI.
 #
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
